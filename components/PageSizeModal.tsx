@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.backgroundSecondary,
   },
   optionText: {
-    fontSize: 16,
     color: COLORS.text,
   },
   selectedOptionText: {

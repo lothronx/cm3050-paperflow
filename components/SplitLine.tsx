@@ -1,6 +1,6 @@
 import { StyleSheet, View, PanResponder } from "react-native";
 import { COLORS } from "@/constants/Colors";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from "react-native-reanimated";
 
 interface SplitLineProps {
@@ -13,11 +13,6 @@ export const SplitLine = ({ position, containerHeight, onUpdatePosition }: Split
   const translateY = useSharedValue(position * containerHeight);
   const isDragging = useRef(false);
 
-  useEffect(() => {
-    if (!isDragging.current) {
-      translateY.value = withSpring(position * containerHeight);
-    }
-  }, [position, containerHeight, translateY]);
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -72,7 +67,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: COLORS.background,
     borderWidth: 2,
-    top: -9,
+    top: -5,
   },
   handleLeft: {
     left: -10,

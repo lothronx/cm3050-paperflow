@@ -4,6 +4,7 @@ import type { TextProps } from "react-native";
 const defaultStyles = StyleSheet.create({
   text: {
     fontFamily: "Montserrat",
+    fontSize: 16,
   },
 });
 
@@ -13,4 +14,4 @@ export const Text = (props: TextProps) => {
   return <RNText style={[defaultStyles.text, style]} {...otherProps} />;
 };
 
-Text.displayName = 'Text';
+Text.displayName = "Text";

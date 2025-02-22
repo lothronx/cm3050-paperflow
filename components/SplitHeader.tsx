@@ -12,7 +12,7 @@ export const SplitHeader = ({ onBack, onPreview }: SplitHeaderProps) => {
   return (
     <View style={styles.header}>
       <TouchableOpacity onPress={onBack} style={styles.button}>
-        <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
+        <Ionicons name="chevron-back" size={22} color={COLORS.primary} />
         <Text style={styles.backText}>Back</Text>
       </TouchableOpacity>
 
@@ -30,21 +30,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: COLORS.background,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.border,
   },
   button: {
     flexDirection: "row",
     alignItems: "center",
   },
   backText: {
-    fontSize: 17,
     color: COLORS.primary,
     marginLeft: 4,
+    fontWeight: "500",
   },
   previewText: {
-    fontSize: 17,
     color: COLORS.primary,
+    fontWeight: "600",
   },
 });

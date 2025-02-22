@@ -1,3 +1,5 @@
+"use client";
+
 import { StyleSheet, View, SafeAreaView } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { useState } from "react";

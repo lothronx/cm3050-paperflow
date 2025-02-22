@@ -6,7 +6,7 @@ import { PageSizeOption, type PageSize } from "@/components/PageSizeOption";
 import { OCROption } from "@/components/OCROption";
 import { CustomButton } from "@/components/CustomButton";
 import { COLORS } from "@/constants/Colors";
-import { router } from "expo-router";
+import { router, Link } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 
 const STORAGE_KEYS = {
@@ -65,6 +65,7 @@ export default function HomeScreen() {
     });
 
     if (!result.canceled) {
+      console.log(result);
       router.push({
         pathname: "/split",
         params: {
@@ -72,7 +73,7 @@ export default function HomeScreen() {
           height: result.assets[0].height,
           width: result.assets[0].width,
           pageSize: pageSize,
-          ocr: ocr,
+          ocr: ocr.toString(),
         },
       });
     }
@@ -103,6 +104,8 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.buttonContainer}>
+            <Link href="/split">split</Link>
+            <Link href="/preview">preview</Link>
             <CustomButton text="Select Image" onPress={handleSelectImage} />
           </View>
         </View>
