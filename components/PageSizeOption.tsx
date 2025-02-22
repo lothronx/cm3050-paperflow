@@ -2,25 +2,46 @@ import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
+import { useState } from "react";
+import { PageSizeModal } from "./PageSizeModal";
+
+export type PageSize = "A4" | "Letter" | "Legal" | "Manual";
+
+const PAGE_SIZE_OPTIONS: PageSize[] = ["A4", "Letter", "Legal", "Manual"];
 
 interface PageSizeOptionProps {
-  title: string;
-  value?: string;
-  showIcon?: boolean;
-  onPress?: () => void;
+  value?: PageSize;
+  onValueChange?: (value: PageSize) => void;
 }
 
-export const PageSizeOption = ({ title, value, showIcon = true, onPress }: PageSizeOptionProps) => {
+export const PageSizeOption = ({ value, onValueChange }: PageSizeOptionProps) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleSelect = (selectedValue: PageSize) => {
+    onValueChange?.(selectedValue);
+    setIsModalVisible(false);
+  };
+
   return (
-    <TouchableOpacity onPress={onPress}>
+    <>
       <View style={styles.container}>
-        <Text style={styles.title}>{title}</Text>
-        <View style={styles.rightContent}>
-          {value && <Text style={styles.value}>{value}</Text>}
-          {showIcon && <Ionicons name="chevron-forward" size={20} color={COLORS.textSecondary} />}
-        </View>
+        <Text style={styles.title}>Page Size</Text>
+        <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+          <View style={styles.rightContent}>
+            {value && <Text style={styles.value}>{value}</Text>}
+            <Ionicons name="chevron-forward" size={20} color={COLORS.textSecondary} />
+          </View>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+
+      <PageSizeModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        onSelect={handleSelect}
+        value={value}
+        options={PAGE_SIZE_OPTIONS}
+      />
+    </>
   );
 };
 
@@ -31,7 +52,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: COLORS.background,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: COLORS.border,
   },

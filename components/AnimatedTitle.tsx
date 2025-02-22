@@ -8,11 +8,19 @@ import { Text } from "@/components/Text";
 
 export const AnimatedTitle = () => {
   const opacity = useSharedValue(0);
-  const translateY = useSharedValue(20);
+  const translateY = useSharedValue(-100);
 
   useEffect(() => {
-    opacity.value = withSpring(1);
-    translateY.value = withSpring(0);
+    opacity.value = withSpring(1, {
+      damping: 15,
+      stiffness: 90,
+    });
+    translateY.value = withSpring(0, {
+      damping: 8,
+      stiffness: 100,
+      mass: 1,
+      velocity: 20,
+    });
   }, [opacity, translateY]);
 
   const animatedStyle = useAnimatedStyle(() => ({
