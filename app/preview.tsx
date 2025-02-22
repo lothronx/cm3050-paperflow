@@ -1,6 +1,6 @@
 "use client";
 
-import { StyleSheet, View, SafeAreaView } from "react-native";
+import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { COLORS } from "@/constants/Colors";
@@ -40,29 +40,41 @@ export default function PreviewScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <BackArrow />
-      <View style={styles.content}>
-        <ImageSwiper images={imageUris} />
+    <ImageBackground
+      source={require("../assets/images/background.jpeg")}
+      style={styles.backgroundImage}
+      resizeMode="cover">
+      <SafeAreaView style={styles.container}>
+        <BackArrow />
+        <View style={styles.content}>
+          <ImageSwiper images={imageUris} />
 
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            text="Share as Photos"
-            onPress={() => handleShare("photos")}
-            variant="outline"
-          />
-          <CustomButton text="Share as PDF" onPress={() => handleShare("pdf")} variant="outline" />
-          <CustomButton text="Done" onPress={handleDone} />
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              text="Share as Photos"
+              onPress={() => handleShare("photos")}
+              variant="outline"
+            />
+            <CustomButton
+              text="Share as PDF"
+              onPress={() => handleShare("pdf")}
+              variant="outline"
+            />
+            <CustomButton text="Done" onPress={handleDone} />
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: "100%",
+  },
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
   content: {
     flex: 1,

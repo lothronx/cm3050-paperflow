@@ -104,8 +104,6 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.buttonContainer}>
-            <Link href="/split">split</Link>
-            <Link href="/preview">preview</Link>
             <CustomButton text="Select Image" onPress={handleSelectImage} />
           </View>
         </View>
@@ -128,14 +126,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   settings: {
-    marginVertical: 20,
-    marginHorizontal: 16,
+    margin: 16,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: COLORS.border,
     borderRadius: 16,
   },
   buttonContainer: {
-    marginTop: 20,
+    marginTop: 16,
     marginBottom: 32,
   },
 });
