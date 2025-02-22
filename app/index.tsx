@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AnimatedTitle } from "@/components/AnimatedTitle";
-import { PageSizeOption, PageSize } from "@/components/PageSizeOption";
+import { PageSizeOption, type PageSize } from "@/components/PageSizeOption";
 import { OCROption } from "@/components/OCROption";
 import { CustomButton } from "@/components/CustomButton";
 import { COLORS } from "@/constants/Colors";
+import { router } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
 
 const STORAGE_KEYS = {
   PAGE_SIZE: "@paperflow_page_size",
@@ -17,7 +19,6 @@ export default function HomeScreen() {
   const [pageSize, setPageSize] = useState<PageSize>("A4");
 
   useEffect(() => {
-    // Load saved values when component mounts
     const getData = async () => {
       try {
         const [savedPageSize, savedOcr] = await Promise.all([
@@ -57,9 +58,24 @@ export default function HomeScreen() {
     }
   };
 
-  const handleSelectImage = () => {
-    // Implement image selection logic
-    console.log("Select image pressed");
+  const handleSelectImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      router.push({
+        pathname: "/split",
+        params: {
+          imageUri: result.assets[0].uri,
+          height: result.assets[0].height,
+          width: result.assets[0].width,
+          pageSize: pageSize,
+          ocr: ocr,
+        },
+      });
+    }
   };
 
   return (

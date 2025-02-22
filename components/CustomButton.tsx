@@ -1,17 +1,38 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
+
 interface CustomButtonProps {
   text: string;
   onPress: () => void;
+  variant?: "solid" | "outline";
+  disabled?: boolean;
 }
 
-export const CustomButton = ({ text, onPress }: CustomButtonProps) => {
+export const CustomButton = ({
+  text,
+  onPress,
+  variant = "solid",
+  disabled = false,
+}: CustomButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
-      <View style={styles.button}>
-        <Text style={styles.buttonText}>{text}</Text>
-      </View>
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.8}
+      disabled={disabled}
+      style={[
+        styles.button,
+        variant === "outline" && styles.outlineButton,
+        disabled && styles.disabledButton,
+      ]}>
+      <Text
+        style={[
+          styles.buttonText,
+          variant === "outline" && styles.outlineButtonText,
+          disabled && styles.disabledButtonText,
+        ]}>
+        {text}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -33,9 +54,24 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  outlineButton: {
+    backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+  },
+  disabledButton: {
+    backgroundColor: COLORS.backgroundSecondary,
+    borderColor: COLORS.border,
+  },
   buttonText: {
     color: COLORS.background,
     fontSize: 18,
     fontWeight: "500",
+  },
+  outlineButtonText: {
+    color: COLORS.primary,
+  },
+  disabledButtonText: {
+    color: COLORS.textSecondary,
   },
 });
