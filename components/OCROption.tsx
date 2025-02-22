@@ -3,16 +3,16 @@ import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
 interface OCROptionProps {
   title: string;
-  value: boolean;
+  defaultValue: boolean;
   onValueChange: (value: boolean) => void;
 }
 
-export const OCROption = ({ title, value, onValueChange }: OCROptionProps) => {
+export const OCROption = ({ title, defaultValue, onValueChange }: OCROptionProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <Switch
-        value={value}
+        value={defaultValue}
         onValueChange={onValueChange}
         trackColor={{ false: COLORS.border, true: COLORS.primary }}
         ios_backgroundColor={COLORS.border}

@@ -10,11 +10,16 @@ export type PageSize = "A4" | "Letter" | "Legal" | "Manual";
 const PAGE_SIZE_OPTIONS: PageSize[] = ["A4", "Letter", "Legal", "Manual"];
 
 interface PageSizeOptionProps {
-  value?: PageSize;
+  title: string;
+  defaultValue?: PageSize;
   onValueChange?: (value: PageSize) => void;
 }
 
-export const PageSizeOption = ({ value, onValueChange }: PageSizeOptionProps) => {
+export const PageSizeOption = ({
+  title,
+  defaultValue,
+  onValueChange,
+}: PageSizeOptionProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleSelect = (selectedValue: PageSize) => {
@@ -25,10 +30,10 @@ export const PageSizeOption = ({ value, onValueChange }: PageSizeOptionProps) =>
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.title}>Page Size</Text>
+        <Text style={styles.title}>{title}</Text>
         <TouchableOpacity onPress={() => setIsModalVisible(true)}>
           <View style={styles.rightContent}>
-            {value && <Text style={styles.value}>{value}</Text>}
+            {defaultValue && <Text style={styles.value}>{defaultValue}</Text>}
             <Ionicons name="chevron-forward" size={20} color={COLORS.textSecondary} />
           </View>
         </TouchableOpacity>
@@ -38,7 +43,7 @@ export const PageSizeOption = ({ value, onValueChange }: PageSizeOptionProps) =>
         isVisible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
         onSelect={handleSelect}
-        value={value}
+        value={defaultValue}
         options={PAGE_SIZE_OPTIONS}
       />
     </>
