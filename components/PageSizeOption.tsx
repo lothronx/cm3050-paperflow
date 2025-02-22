@@ -4,6 +4,7 @@ import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
 import { useState } from "react";
 import { PageSizeModal } from "./PageSizeModal";
+import { InfoTooltip } from "./InfoTooltip";
 
 export type PageSize = "A4" | "Letter" | "Legal" | "Manual";
 
@@ -11,12 +12,14 @@ const PAGE_SIZE_OPTIONS: PageSize[] = ["A4", "Letter", "Legal", "Manual"];
 
 interface PageSizeOptionProps {
   title: string;
+  tooltip?: string;
   defaultValue?: PageSize;
   onValueChange?: (value: PageSize) => void;
 }
 
 export const PageSizeOption = ({
   title,
+  tooltip,
   defaultValue,
   onValueChange,
 }: PageSizeOptionProps) => {
@@ -30,7 +33,10 @@ export const PageSizeOption = ({
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.title}>{title}</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>{title}</Text>
+          {tooltip && <InfoTooltip content={tooltip} />}
+        </View>
         <TouchableOpacity onPress={() => setIsModalVisible(true)}>
           <View style={styles.rightContent}>
             {defaultValue && <Text style={styles.value}>{defaultValue}</Text>}
@@ -60,9 +66,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: COLORS.border,
   },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   title: {
     fontSize: 16,
     color: COLORS.text,
+    marginRight: 4,
   },
   rightContent: {
     flexDirection: "row",

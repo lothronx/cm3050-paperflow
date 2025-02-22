@@ -35,7 +35,7 @@ export default function HomeScreen() {
         console.error("Error loading saved values:", error);
       }
     };
-    
+
     getData();
   }, []);
 
@@ -73,12 +73,14 @@ export default function HomeScreen() {
 
           <View style={styles.settings}>
             <PageSizeOption
-              title="Select Page Size"
+              title="Page Size"
+              tooltip="Choose the page size for splitting your image."
               defaultValue={pageSize}
               onValueChange={handlePageSizeChange}
             />
             <OCROption
               title="Prevent Text Truncation"
+              tooltip="Enable this to detect text using OCR (requires internet). This ensures your text stays complete during splitting."
               defaultValue={ocr}
               onValueChange={handleOcrChange}
             />
