@@ -10,9 +10,11 @@ Date: March 10, 2025
 
 ### 1.1 Background
 
-Long-form text-based images have emerged as a prevalent medium on the internet, especially within the Chinese-speaking online community, driven by three key factors: 1) the widespread support for scrolling screenshots among smartphones in China, 2) the popularity of image stitching software, and 3) the established practice of sharing long visuals.
+Long-form text-based images have emerged as a prevalent medium on the internet, especially within the Chinese-speaking online community, driven by three key factors: 1) the widespread support for scrolling screenshots among smartphones in China, 2) the popularity of image stitching application and article-to-image tools, and 3) the established practice of sharing long pictures instead of links/texts.
 
-While this trend reflects user preferences and behaviors, it presents a significant challenge, particularly in the context of printing. For instance, legal professionals often require hard copies of long-image evidence, such as unrolled WeChat chat logs, for court submissions. A thorough search of available applications reveals a gap in the market, as most long-image splitting tools merely segment images into equal parts, risking text truncation and compelling users to engage in cumbersome calculations of the right number of segments for proper printing aspect ratios.
+While this trend reflects user preferences and behaviors, it presents a significant challenge, particularly in the context of printing. For instance, legal professionals often require hard copies of long-image evidence, such as unrolled WeChat chat logs, for court submissions.
+
+A thorough search of available applications reveals a gap in the market, as most long-image splitting tools merely segment images into N equal parts, risking text truncation and compelling users to engage in cumbersome calculations of the right number of segments for proper printing aspect ratios.
 
 This project proposes a targeted solution to effectively address the long image printing challenge.
 
@@ -52,21 +54,19 @@ Allows users to save and share the results as images (JPEG) or as a PDF file.
 
 ### 1.4 Split Logic
 
-#### 1.4.1 Unlimited Proportion
+#### 1.4.1 Undefined Proportion
 
 - No automatic splitting; directly enters the split preview interface.
 - Users can manually add, move, or delete split lines.
 
 #### 1.4.2 Fixed Proportion (A4, Letter, Legal)
 
-##### Without OCR
-
-- Automatically splits the long image into multiple pages matching the selected proportion.
-- The last page automatically fills blank space to match the proportion.
-
-##### With OCR
-
-- Based on OCR results, ensures no text is truncated while making each split page as close as possible to the selected proportion (equal to or slightly smaller than the proportion).
+- Application should remember the user preferences (proportion and OCR option)
+- Without OCR
+  - Automatically splits the long image into multiple pages matching the selected proportion.
+- With OCR
+  - Based on OCR results, ensures no text is truncated while making each split page as close as possible to the selected proportion (equal to or slightly smaller than the proportion).
+- Users can manually add, move, or delete split lines.
 - The last page automatically fills blank space to match the proportion.
 
 ## 2. Wireframing
@@ -121,6 +121,10 @@ Robust error handling and edge-case management, ensuring stability across variou
 This prototype was thoroughly tested by users and served as the foundation for the fully developed application.
 
 ## 5. Development
+
+### Choose the OCR provider
+
+
 
 ## 6. Unit Testing
 
