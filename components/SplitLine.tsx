@@ -1,46 +1,40 @@
-import { StyleSheet, View, PanResponder } from "react-native";
+import { StyleSheet, View, PanResponder, Pressable, TouchableOpacity } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
-import { useRef } from "react";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from "react-native-reanimated";
-
 interface SplitLineProps {
   position: number;
   containerHeight: number;
   onUpdatePosition: (position: number) => void;
+  handleRemoveSplit: () => void;
 }
 
-export const SplitLine = ({ position, containerHeight, onUpdatePosition }: SplitLineProps) => {
-  const translateY = useSharedValue(position * containerHeight);
-  const isDragging = useRef(false);
-
-
+export const SplitLine = ({
+  position,
+  containerHeight,
+  onUpdatePosition,
+  handleRemoveSplit,
+}: SplitLineProps) => {
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
-    onPanResponderGrant: () => {
-      isDragging.current = true;
-    },
-    onPanResponderMove: (_, gestureState) => {
-      const newPosition = translateY.value + gestureState.dy;
-      if (newPosition >= 0 && newPosition <= containerHeight) {
-        translateY.value = newPosition;
-        onUpdatePosition(newPosition / containerHeight);
-      }
-    },
-    onPanResponderRelease: () => {
-      isDragging.current = false;
-    },
+    onPanResponderGrant: () => {},
+    onPanResponderMove: () => {},
+    onPanResponderRelease: () => {},
   });
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
-  }));
-
   return (
-    <Animated.View style={[styles.container, animatedStyle]} {...panResponder.panHandlers}>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={handleRemoveSplit}>
+        <View style={[styles.iconContainer, styles.deleteIconContainer]}>
+          <MaterialIcons name="delete" size={16} color={COLORS.background} />
+        </View>
+      </TouchableOpacity>
       <View style={styles.line} />
-      <View style={[styles.handle, styles.handleLeft]} />
-      <View style={[styles.handle, styles.handleRight]} />
-    </Animated.View>
+      <TouchableOpacity {...panResponder.panHandlers}>
+        <View style={[styles.iconContainer, styles.dragHandleIconContainer]}>
+          <MaterialIcons name="drag-indicator" size={16} color={COLORS.background} />
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -49,32 +43,50 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
-    height: 20,
-    justifyContent: "center",
-    zIndex: 1000,
+    height: 2,
+    flexDirection: "row",
+    zIndex: 1,
   },
   line: {
+    flex: 1,
     height: 2,
+    marginHorizontal: 12,
     backgroundColor: COLORS.border,
-    borderStyle: "dashed",
     borderWidth: 1,
-    borderColor: COLORS.border,
-  },
-  handle: {
-    position: "absolute",
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: COLORS.background,
-    borderWidth: 2,
-    top: -5,
-  },
-  handleLeft: {
-    left: -10,
-    borderColor: COLORS.secondary,
-  },
-  handleRight: {
-    right: -10,
     borderColor: COLORS.primary,
+    borderStyle: "dashed",
+    shadowColor: COLORS.border,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.9,
+    shadowRadius: 1,
+    elevation: 5,
+  },
+  iconContainer: {
+    position: "absolute",
+    width: 24,
+    height: 24,
+    borderRadius: 999,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    transform: [{ translateY: -12 }],
+  },
+  deleteIconContainer: {
+    backgroundColor: COLORS.secondary,
+    left: -12,
+  },
+  dragHandleIconContainer: {
+    backgroundColor: COLORS.primary,
+    right: -12,
   },
 });

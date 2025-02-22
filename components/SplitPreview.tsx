@@ -10,9 +10,16 @@ interface SplitPreviewProps {
   splits: number[];
   onUpdateSplit: (index: number, position: number) => void;
   onLoadEnd: () => void;
+  handleRemoveSplit: () => void;
 }
 
-export const SplitPreview = ({ imageUri, splits, onUpdateSplit, onLoadEnd }: SplitPreviewProps) => {
+export const SplitPreview = ({
+  imageUri,
+  splits,
+  onUpdateSplit,
+  onLoadEnd,
+  handleRemoveSplit,
+}: SplitPreviewProps) => {
   const [containerHeight, setContainerHeight] = useState(0);
 
   const handleLayout = (event: LayoutChangeEvent) => {
@@ -33,6 +40,7 @@ export const SplitPreview = ({ imageUri, splits, onUpdateSplit, onLoadEnd }: Spl
           position={split}
           containerHeight={containerHeight}
           onUpdatePosition={(position) => onUpdateSplit(index, position)}
+          handleRemoveSplit={handleRemoveSplit}
         />
       ))}
     </View>
@@ -41,10 +49,11 @@ export const SplitPreview = ({ imageUri, splits, onUpdateSplit, onLoadEnd }: Spl
 
 const styles = StyleSheet.create({
   container: {
+    marginHorizontal: 20,
+    marginTop: 150,
     flex: 1,
     backgroundColor: COLORS.backgroundSecondary,
-    borderRadius: 8,
-    overflow: "hidden",
+    overflow: "visible",
     position: "relative",
   },
   image: {

@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
 
@@ -6,31 +6,19 @@ interface CustomButtonProps {
   text: string;
   onPress: () => void;
   variant?: "solid" | "outline";
-  disabled?: boolean;
 }
 
 export const CustomButton = ({
   text,
   onPress,
   variant = "solid",
-  disabled = false,
 }: CustomButtonProps) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.8}
-      disabled={disabled}
-      style={[
-        styles.button,
-        variant === "outline" && styles.outlineButton,
-        disabled && styles.disabledButton,
-      ]}>
-      <Text
-        style={[
-          styles.buttonText,
-          variant === "outline" && styles.outlineButtonText,
-          disabled && styles.disabledButtonText,
-        ]}>
+      style={[styles.button, variant === "outline" && styles.outlineButton]}>
+      <Text style={[styles.buttonText, variant === "outline" && styles.outlineButtonText]}>
         {text}
       </Text>
     </TouchableOpacity>
@@ -45,7 +33,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 16,
     backgroundColor: COLORS.primary,
-    shadowColor: "#000",
+    shadowColor: "rgba(0, 0, 0, 0.5)",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -55,23 +43,28 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   outlineButton: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: COLORS.primary,
-  },
-  disabledButton: {
-    backgroundColor: COLORS.backgroundSecondary,
+    backgroundColor: COLORS.background,
+    borderWidth: StyleSheet.hairlineWidth,
     borderColor: COLORS.border,
   },
   buttonText: {
     color: COLORS.background,
     fontSize: 18,
     fontWeight: "500",
+    textShadowColor: "rgba(0, 0, 0, 0.25)",
+    textShadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    textShadowRadius: 3.84,
   },
   outlineButtonText: {
     color: COLORS.primary,
-  },
-  disabledButtonText: {
-    color: COLORS.textSecondary,
+    textShadowColor: "rgba(0, 0, 0, 0.1)",
+    textShadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    textShadowRadius: 3.84,
   },
 });

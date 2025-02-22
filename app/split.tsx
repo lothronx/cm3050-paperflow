@@ -1,8 +1,10 @@
-import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
-import { useLocalSearchParams, Stack, router } from "expo-router";
+import { StyleSheet, View } from "react-native";
+import { useLocalSearchParams, router } from "expo-router";
 import { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "@/constants/Colors";
-import { SplitHeader } from "@/components/SplitHeader";
+import { BackArrow } from "@/components/BackArrow";
+import { CheckArrow } from "@/components/CheckArrow";
 import { SplitPreview } from "@/components/SplitPreview";
 import { SplitActions } from "@/components/SplitActions";
 import { Text } from "@/components/Text";
@@ -15,7 +17,7 @@ export default function SplitScreen() {
   const [isProcessing, setIsProcessing] = useState(true);
 
   const handleAddSplit = () => {
-    const newSplit = splits.length > 0 ? splits[splits.length - 1] + 0.25 : 0.5;
+    const newSplit = splits.length > 0 ? splits[splits.length - 1] + 0.25 : 200;
     if (newSplit < 1) {
       setSplits([...splits, newSplit]);
     }
@@ -31,64 +33,43 @@ export default function SplitScreen() {
     setSplits(newSplits);
   };
 
+  const handleRemoveSplit = () => {
+    setSplits(splits.slice(0, -1));
+  };
+
   const handlePreview = () => {
     // Convert the splits into actual image URIs (this is a placeholder)
     const splitImages = splits.map((_, index) => `${imageUri}_split_${index}`);
 
     router.push({
       pathname: "/preview",
-      
     });
   };
 
   return (
-    <ImageBackground
-      source={require("../assets/images/background.jpeg")}
-      style={styles.backgroundImage}
-      resizeMode="cover">
-      <SafeAreaView style={styles.container}>
-        <SplitHeader onBack={() => router.back()} onPreview={handlePreview} />
-
-        <View style={styles.content}>
-          <SplitPreview
-            imageUri={imageUri as string}
-            splits={splits}
-            onUpdateSplit={handleUpdateSplit}
-            onLoadEnd={() => setIsProcessing(false)}
-          />
-
-          <Text style={styles.instructionText}>
-            Press and drag lines to adjust split positions.
-          </Text>
-
-          <SplitActions
-            onAddSplit={handleAddSplit}
-            onRemoveAllSplits={handleRemoveAllSplits}
-            showAddSplit={splits.length < 4}
-          />
-        </View>
-      </SafeAreaView>
-    </ImageBackground>
+    <SafeAreaView style={styles.container} edges={["bottom"]}>
+      <View style={styles.content}>
+        <BackArrow />
+        <CheckArrow onClick={handlePreview} />
+        <SplitPreview
+          imageUri={imageUri as string}
+          splits={splits}
+          onUpdateSplit={handleUpdateSplit}
+          onLoadEnd={() => setIsProcessing(false)}
+          handleRemoveSplit={handleRemoveSplit}
+        />
+        <SplitActions onAddSplit={handleAddSplit} onRemoveAllSplits={handleRemoveAllSplits} />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-    width: "100%",
-  },
   container: {
     flex: 1,
+    backgroundColor: COLORS.background,
   },
   content: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "flex-end",
-  },
-  instructionText: {
-    textAlign: "center",
-    color: COLORS.textSecondary,
-    marginVertical: 8,
-    fontSize: 10,
   },
 });

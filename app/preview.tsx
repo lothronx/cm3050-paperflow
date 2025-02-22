@@ -1,13 +1,12 @@
 "use client";
 
 import { StyleSheet, View, SafeAreaView } from "react-native";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { COLORS } from "@/constants/Colors";
-import { PreviewHeader } from "@/components/PreviewHeader";
-import { ShareOptions } from "@/components/ShareOptions";
-import { PreviewGrid } from "@/components/PreviewGrid";
-import { PreviewActions } from "@/components/PreviewActions";
+import { BackArrow } from "@/components/BackArrow";
+import { ImageSwiper } from "@/components/ImageSwiper";
+import { CustomButton } from "@/components/CustomButton";
 
 export default function PreviewScreen() {
   const { images } = useLocalSearchParams();
@@ -36,18 +35,25 @@ export default function PreviewScreen() {
     }
   };
 
+  const handleDone = () => {
+    router.push("/");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <Stack.Screen
-        options={{
-          header: () => <PreviewHeader />,
-        }}
-      />
-
+      <BackArrow />
       <View style={styles.content}>
-        <ShareOptions onShare={handleShare} />
-        <PreviewGrid images={imageUris} />
-        <PreviewActions onSave={handleSave} isLoading={isLoading} />
+        <ImageSwiper images={imageUris} />
+
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            text="Share as Photos"
+            onPress={() => handleShare("photos")}
+            variant="outline"
+          />
+          <CustomButton text="Share as PDF" onPress={() => handleShare("pdf")} variant="outline" />
+          <CustomButton text="Done" onPress={handleDone} />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -60,6 +66,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 16,
+  },
+  buttonContainer: {
+    gap: 10,
+    marginBottom: 32,
   },
 });
