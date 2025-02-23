@@ -55,11 +55,11 @@ export default function SplitScreen() {
     }
   };
 
-  const handleZoom = (event: any) => {
-    setIsZoomedIn(event.nativeEvent.scale > 1);
+  const handleZoom = (newZoomState: boolean) => {
+    setIsZoomedIn(newZoomState);
 
     if (scrollViewRef.current) {
-      if (!isZoomedIn) {
+      if (!newZoomState) {
         // Zooming out - scroll to top
         scrollViewRef.current.scrollTo({ y: 0, animated: false });
       } else {
@@ -72,6 +72,14 @@ export default function SplitScreen() {
         }, 0);
       }
     }
+  };
+
+  const handlePinchGesture = (event: any) => {
+    handleZoom(event.nativeEvent.scale > 1);
+  };
+
+  const handleToggle = () => {
+    handleZoom(!isZoomedIn);
   };
 
   const handleAddSplit = () => {
@@ -105,8 +113,8 @@ export default function SplitScreen() {
         <BackArrow />
         <CheckArrow onClick={handlePreview} />
         <View style={styles.innerContainer} onLayout={handleLayout}>
-          <ZoomControl isZoomedIn={isZoomedIn} onToggle={() => setIsZoomedIn(!isZoomedIn)} />
-          <PinchGestureHandler onGestureEvent={handleZoom}>
+          <ZoomControl isZoomedIn={isZoomedIn} onToggle={handleToggle} />
+          <PinchGestureHandler onGestureEvent={handlePinchGesture}>
             <ScrollView
               ref={scrollViewRef}
               style={styles.innerContainer}
