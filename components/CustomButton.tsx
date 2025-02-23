@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
 
@@ -6,21 +6,21 @@ interface CustomButtonProps {
   text: string;
   onPress: () => void;
   variant?: "solid" | "outline";
+  icon?: React.ReactNode;
 }
 
-export const CustomButton = ({
-  text,
-  onPress,
-  variant = "solid",
-}: CustomButtonProps) => {
+export const CustomButton = ({ text, onPress, variant = "solid", icon }: CustomButtonProps) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.8}
       style={[styles.button, variant === "outline" && styles.outlineButton]}>
-      <Text style={[styles.buttonText, variant === "outline" && styles.outlineButtonText]}>
-        {text}
-      </Text>
+      <View style={styles.buttonContent}>
+        {icon && <View style={styles.iconContainer}>{icon}</View>}
+        <Text style={[styles.buttonText, variant === "outline" && styles.outlineButtonText]}>
+          {text}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -66,5 +66,13 @@ const styles = StyleSheet.create({
       height: 2,
     },
     textShadowRadius: 3.84,
+  },
+  buttonContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  iconContainer: {
+    marginRight: 8,
   },
 });

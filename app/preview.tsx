@@ -3,6 +3,7 @@
 import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
 import { BackArrow } from "@/components/BackArrow";
 import { ImageSwiper } from "@/components/ImageSwiper";
@@ -54,11 +55,13 @@ export default function PreviewScreen() {
               text="Share as Photos"
               onPress={() => handleShare("photos")}
               variant="outline"
+              icon={<Ionicons name="images-outline" size={20} color={COLORS.primary} />}
             />
             <CustomButton
               text="Share as PDF"
               onPress={() => handleShare("pdf")}
               variant="outline"
+              icon={<Ionicons name="document-outline" size={20} color={COLORS.primary} />}
             />
             <CustomButton text="Done" onPress={handleDone} />
           </View>

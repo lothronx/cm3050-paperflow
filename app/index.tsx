@@ -10,7 +10,6 @@ import { CustomButton } from "@/components/CustomButton";
 import { COLORS } from "@/constants/Colors";
 import { type PageSize } from "@/constants/PageSizes";
 
-
 const STORAGE_KEYS = {
   PAGE_SIZE: "@paperflow_page_size",
   OCR: "@paperflow_ocr",
@@ -66,25 +65,25 @@ export default function HomeScreen() {
       quality: 1,
     });
 
-    result = {
-      assets: [
-        {
-          assetId: "ED7AC36B-A150-4C38-BB8C-B6D696F4F2ED/L0/001",
-          base64: null,
-          duration: null,
-          exif: null,
-          fileName: "test-1.jpg",
-          fileSize: 1922839,
-          height: 16363,
-          mimeType: "image/jpg",
-          pairedVideoAsset: null,
-          type: "image",
-          uri: "file:///Users/lothron/Documents/UoL/CM3050-Mobile-Development/paperflow/assets/images/test-1.jpg",
-          width: 682,
-        },
-      ],
-      canceled: false,
-    };
+    // result = {
+    //   assets: [
+    //     {
+    //       assetId: "ED7AC36B-A150-4C38-BB8C-B6D696F4F2ED/L0/001",
+    //       base64: null,
+    //       duration: null,
+    //       exif: null,
+    //       fileName: "test-1.jpg",
+    //       fileSize: 1922839,
+    //       height: 16363,
+    //       mimeType: "image/jpg",
+    //       pairedVideoAsset: null,
+    //       type: "image",
+    //       uri: "file:///Users/lothron/Documents/UoL/CM3050-Mobile-Development/paperflow/assets/images/test-1.jpg",
+    //       width: 682,
+    //     },
+    //   ],
+    //   canceled: false,
+    // };
 
     if (!result.canceled) {
       router.push({

@@ -7,6 +7,7 @@ import { BackArrow } from "@/components/BackArrow";
 import { CheckArrow } from "@/components/CheckArrow";
 import { SplitPreview } from "@/components/SplitPreview";
 import { SplitActions } from "@/components/SplitActions";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function SplitScreen() {
   const { imageUri, height, width, pageSize, ocrString } = useLocalSearchParams();
@@ -15,11 +16,21 @@ export default function SplitScreen() {
   const [splits, setSplits] = useState<number[]>([]);
   const [isProcessing, setIsProcessing] = useState(true);
 
-  const handleAddSplit = () => {};
+  const handleAddSplit = () => {
+    // Add a new split at 50% of the image height
+    setSplits([...splits, 50]);
+  };
 
-  const handleUpdateSplit = () => {};
+  const handleUpdateSplit = (index: number, position: number) => {
+    const newSplits = [...splits];
+    newSplits[index] = position;
+    setSplits(newSplits);
+  };
 
-  const handleRemoveSplit = () => {};
+  const handleRemoveSplit = (index: number) => {
+    const newSplits = splits.filter((_, i) => i !== index);
+    setSplits(newSplits);
+  };
 
   const handleRemoveAllSplits = () => {
     setSplits([]);
@@ -32,19 +43,21 @@ export default function SplitScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={["bottom"]}>
-      <View style={styles.content}>
-        <BackArrow />
-        <CheckArrow onClick={handlePreview} />
-        <SplitPreview
-          imageUri={imageUri as string}
-          splits={splits}
-          onUpdateSplit={handleUpdateSplit}
-          onRemoveSplit={handleRemoveSplit}
-        />
-        <SplitActions onAddSplit={handleAddSplit} onRemoveAllSplits={handleRemoveAllSplits} />
-      </View>
-    </SafeAreaView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView style={styles.container} edges={["bottom"]}>
+        <View style={styles.content}>
+          <BackArrow />
+          <CheckArrow onClick={handlePreview} />
+          <SplitPreview
+            imageUri={imageUri as string}
+            splits={splits}
+            onUpdateSplit={handleUpdateSplit}
+            onRemoveSplit={handleRemoveSplit}
+          />
+          <SplitActions onAddSplit={handleAddSplit} onRemoveAllSplits={handleRemoveAllSplits} />
+        </View>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
 
