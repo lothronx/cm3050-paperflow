@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { StyleSheet, View, Image, type LayoutChangeEvent, Pressable } from "react-native";
+import { StyleSheet, View, Image, type LayoutChangeEvent } from "react-native";
 import {
   ScrollView,
   PinchGestureHandler,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
-import { MaterialIcons } from "@expo/vector-icons";
 import { SplitLine } from "@/components/SplitLine";
+import { ZoomControl } from "@/components/ZoomControl";
 import { COLORS } from "@/constants/Colors";
 
 type ImageDimensions = {
@@ -38,16 +38,6 @@ const useImageDimensions = (imageUri: string, containerWidth: number) => {
 
   return dimensions;
 };
-
-const ZoomControl = ({ isZoomedIn, onToggle }: { isZoomedIn: boolean; onToggle: () => void }) => (
-  <Pressable onPress={onToggle} style={styles.zoomButton}>
-    <MaterialIcons
-      name={isZoomedIn ? "zoom-in-map" : "zoom-out-map"}
-      size={18}
-      color={COLORS.primary}
-    />
-  </Pressable>
-);
 
 export const SplitPreview = ({
   imageUri,
@@ -179,25 +169,5 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-  },
-  zoomButton: {
-    position: "absolute",
-    bottom: 10,
-    left: "50%",
-    transform: [{ translateX: -17 }],
-
-    paddingVertical: 6,
-    paddingHorizontal: 8,
-    borderRadius: 999,
-    zIndex: 1,
-    backgroundColor: COLORS.background,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
 });

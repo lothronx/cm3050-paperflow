@@ -73,18 +73,18 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     right: 0,
-    height: 2,
+    height: 1,
     flexDirection: "row",
     zIndex: 1,
   },
   line: {
     flex: 1,
-    height: 2,
-    marginHorizontal: 12,
+    height: 1,
+    marginHorizontal: 24,
     backgroundColor: COLORS.border,
     borderWidth: 1,
     borderColor: COLORS.primary,
-    borderStyle: "dashed",
+    borderStyle: "dotted",
     shadowColor: COLORS.border,
     shadowOffset: {
       width: 0,
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     position: "absolute",
+    transform: [{ translateY: -12 }],
     width: 24,
     height: 24,
     borderRadius: 999,
@@ -112,18 +113,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    transform: [{ translateY: -12 }],
   },
   deleteIconContainer: {
     backgroundColor: COLORS.secondary,
-    left: -12,
+    left: 0,
   },
   deleteIconContainerActive: {
     backgroundColor: COLORS.secondaryActive,
   },
   dragHandleIconContainer: {
     backgroundColor: COLORS.primary,
-    right: -12,
+    right: 0,
   },
   dragHandleIconContainerActive: {
     backgroundColor: COLORS.primaryActive,
