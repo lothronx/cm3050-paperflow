@@ -41,7 +41,7 @@ export const SplitLine = ({
   });
 
   return (
-    <View style={[styles.container, { top: `${position}%` }]}>
+    <View style={[styles.container, { top: position }]}>
       <Pressable
         onPress={() => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);

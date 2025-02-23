@@ -66,7 +66,6 @@ export default function HomeScreen() {
     });
 
     if (!result.canceled) {
-      console.log("Selected image:", result.assets[0]);
       router.push({
         pathname: "/split",
         params: {
@@ -74,7 +73,7 @@ export default function HomeScreen() {
           imageHeight: result.assets[0].height as number,
           imageWidth: result.assets[0].width as number,
           pageSize: pageSize as PageSize,
-          ocrString: ocr as unknown as string,
+          ocrString: ocr? "true" : "false",
         },
       });
     }
