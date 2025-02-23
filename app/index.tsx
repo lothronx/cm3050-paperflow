@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
+import { router } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AnimatedTitle } from "@/components/AnimatedTitle";
-import { PageSizeOption, type PageSize } from "@/components/PageSizeOption";
+import { PageSizeOption } from "@/components/PageSizeOption";
 import { OCROption } from "@/components/OCROption";
 import { CustomButton } from "@/components/CustomButton";
 import { COLORS } from "@/constants/Colors";
-import { router, Link } from "expo-router";
-import * as ImagePicker from "expo-image-picker";
+import { type PageSize } from "@/constants/PageSizes";
+
 
 const STORAGE_KEYS = {
   PAGE_SIZE: "@paperflow_page_size",
@@ -59,13 +61,32 @@ export default function HomeScreen() {
   };
 
   const handleSelectImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
+    let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       quality: 1,
     });
 
+    result = {
+      assets: [
+        {
+          assetId: "ED7AC36B-A150-4C38-BB8C-B6D696F4F2ED/L0/001",
+          base64: null,
+          duration: null,
+          exif: null,
+          fileName: "test-1.jpg",
+          fileSize: 1922839,
+          height: 16363,
+          mimeType: "image/jpg",
+          pairedVideoAsset: null,
+          type: "image",
+          uri: "file:///Users/lothron/Documents/UoL/CM3050-Mobile-Development/paperflow/assets/images/test-1.jpg",
+          width: 682,
+        },
+      ],
+      canceled: false,
+    };
+
     if (!result.canceled) {
-      console.log(result);
       router.push({
         pathname: "/split",
         params: {

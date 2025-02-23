@@ -1,8 +1,8 @@
 import { StyleSheet, TouchableOpacity, Modal, FlatList, SafeAreaView, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
+import { type PageSize } from "@/constants/PageSizes";
 import { Text } from "@/components/Text";
-import { PageSize } from "./PageSizeOption";
 
 interface PageSizeModalProps {
   isVisible: boolean;

@@ -1,7 +1,8 @@
 import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
-import { router } from "expo-router";
+
 
 export const BackArrow = () => {
   return (

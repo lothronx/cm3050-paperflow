@@ -1,14 +1,11 @@
+import { useState } from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
+import { PageSizes, type PageSize } from "@/constants/PageSizes";
 import { Text } from "@/components/Text";
-import { useState } from "react";
-import { PageSizeModal } from "./PageSizeModal";
-import { InfoTooltip } from "./InfoTooltip";
-
-export type PageSize = "A4" | "Letter" | "Legal" | "Manual";
-
-const PAGE_SIZE_OPTIONS: PageSize[] = ["A4", "Letter", "Legal", "Manual"];
+import { PageSizeModal } from "@/components/PageSizeModal";
+import { InfoTooltip } from "@/components/InfoTooltip";
 
 interface PageSizeOptionProps {
   title: string;
@@ -50,7 +47,7 @@ export const PageSizeOption = ({
         onClose={() => setIsModalVisible(false)}
         onSelect={handleSelect}
         value={defaultValue}
-        options={PAGE_SIZE_OPTIONS}
+        options={Object.keys(PageSizes) as PageSize[]}
       />
     </>
   );

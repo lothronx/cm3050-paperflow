@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Tooltip from "react-native-walkthrough-tooltip";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
-import Tooltip from "react-native-walkthrough-tooltip";
-import { useState } from "react";
+
 
 interface InfoTooltipProps {
   content: string;

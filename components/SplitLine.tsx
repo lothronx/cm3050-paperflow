@@ -1,19 +1,12 @@
-import { StyleSheet, View, PanResponder, Pressable, TouchableOpacity } from "react-native";
+import { StyleSheet, View, PanResponder, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
 interface SplitLineProps {
-  position: number;
-  containerHeight: number;
-  onUpdatePosition: (position: number) => void;
-  handleRemoveSplit: () => void;
+  onUpdatePosition: () => void;
+  onRemoveSplit: () => void;
 }
 
-export const SplitLine = ({
-  position,
-  containerHeight,
-  onUpdatePosition,
-  handleRemoveSplit,
-}: SplitLineProps) => {
+export const SplitLine = ({ onUpdatePosition, onRemoveSplit }: SplitLineProps) => {
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderGrant: () => {},
@@ -23,7 +16,7 @@ export const SplitLine = ({
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleRemoveSplit}>
+      <TouchableOpacity onPress={onRemoveSplit}>
         <View style={[styles.iconContainer, styles.deleteIconContainer]}>
           <MaterialIcons name="delete" size={16} color={COLORS.background} />
         </View>

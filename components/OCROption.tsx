@@ -1,7 +1,7 @@
 import { StyleSheet, View, Switch } from "react-native";
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
-import { InfoTooltip } from "./InfoTooltip";
+import { InfoTooltip } from "@/components/InfoTooltip";
 interface OCROptionProps {
   title: string;
   tooltip?: string;

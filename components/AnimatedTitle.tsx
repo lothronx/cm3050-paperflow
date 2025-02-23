@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from "react-native-reanimated";
