@@ -141,7 +141,6 @@ export default function SplitScreen() {
         actualDimensions.height,
         splitPositions
       );
-      console.log(splitImages)
       router.push({
         pathname: "/preview",
         params: {
