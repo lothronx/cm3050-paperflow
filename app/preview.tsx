@@ -1,8 +1,6 @@
-"use client";
-
 import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import * as Sharing from "expo-sharing";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
 import { BackArrow } from "@/components/BackArrow";
@@ -10,29 +8,45 @@ import { ImageSwiper } from "@/components/ImageSwiper";
 import { CustomButton } from "@/components/CustomButton";
 
 export default function PreviewScreen() {
-  const { images } = useLocalSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
+  const params = useLocalSearchParams<{ images: string }>();
 
   // Parse the stringified array of image URIs
-  const imageUris = typeof images === "string" ? JSON.parse(images) : [];
+  const images: string[] = params.images ? JSON.parse(params.images) : [];
 
   const handleShare = async (type: "photos" | "pdf") => {
-    setIsLoading(true);
     try {
-      // Implement sharing logic
-      console.log(`Sharing as ${type}`, imageUris);
-    } finally {
-      setIsLoading(false);
+      const isAvailable = await Sharing.isAvailableAsync();
+      if (!isAvailable) {
+        alert("Sharing is not available on your platform");
+        return;
+      }
+      if (type === "photos") {
+        // Share multiple images
+        await Promise.all(
+          images.map(async (imageUri) => {
+            await Sharing.shareAsync(imageUri);
+          })
+        );
+      } else {
+        // // Generate and share PDF
+        // const { filePath } = await createPdf({
+        //   imagePaths: images,
+        //   name: "paperflow_scan",
+        //   paperSize: "A4",
+        // });
+        // await Sharing.shareAsync(filePath);
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+      alert("Failed to share. Please try again.");
     }
   };
 
-  const handleSave = async (type: "photos" | "pdf") => {
-    setIsLoading(true);
+  const handleSave = async () => {
     try {
       // Implement saving logic
-      console.log(`Saving as ${type}`, imageUris);
+      console.log(images);
     } finally {
-      setIsLoading(false);
     }
   };
 
@@ -48,7 +62,7 @@ export default function PreviewScreen() {
       <SafeAreaView style={styles.container}>
         <BackArrow />
         <View style={styles.content}>
-          <ImageSwiper images={imageUris} />
+          <ImageSwiper images={images} />
 
           <View style={styles.buttonContainer}>
             <CustomButton

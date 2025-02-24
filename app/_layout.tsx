@@ -9,7 +9,6 @@ export default function RootLayout() {
     async function loadFonts() {
       await Font.loadAsync({
         Playfair: require("@/assets/fonts/PlayfairDisplay-BlackItalic.ttf"),
-        Karla: require("@/assets/fonts/Karla-Regular.ttf"),
         Montserrat: require("@/assets/fonts/Montserrat-VariableFont_wght.ttf"),
       });
       setFontsLoaded(true);

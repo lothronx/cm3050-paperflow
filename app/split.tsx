@@ -17,6 +17,7 @@ import { PageSizes, type PageSize } from "@/constants/PageSizes";
 import { type ImageDimensions, useImageDimensions } from "@/hooks/useImageDimensions";
 import { useSplitLineHorizontalPos } from "@/hooks/useSplitLineHorizontalPos";
 import { useZoomAndScroll } from "@/hooks/useZoomAndScroll";
+import * as ImageManipulator from "expo-image-manipulator";
 
 export default function SplitScreen() {
   const params = useLocalSearchParams<{
@@ -86,10 +87,73 @@ export default function SplitScreen() {
     setSplitPositions([]);
   };
 
-  const handlePreview = () => {
-    router.push({
-      pathname: "/preview",
-    });
+  const splitImage = async (imageUri: string, height: number, positions: number[]) => {
+    const sortedPositions = [...positions].sort((a, b) => a - b);
+    const images: string[] = [];
+
+    let startY = 0;
+    for (const position of sortedPositions) {
+      const result = await ImageManipulator.manipulateAsync(
+        imageUri,
+        [
+          {
+            crop: {
+              originX: 0,
+              originY: startY,
+              width: actualDimensions.width,
+              height: position - startY,
+            },
+          },
+        ],
+        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+      );
+      images.push(result.uri);
+      startY = position;
+    }
+
+    // Handle the last segment
+    if (startY < actualDimensions.height) {
+      const result = await ImageManipulator.manipulateAsync(
+        imageUri,
+        [
+          {
+            crop: {
+              originX: 0,
+              originY: startY,
+              width: actualDimensions.width,
+              height: actualDimensions.height - startY,
+            },
+          },
+        ],
+        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+      );
+      images.push(result.uri);
+    }
+
+    return images;
+  };
+
+  const handlePreview = async () => {
+    try {
+      setIsProcessing(true);
+      const splitImages = await splitImage(
+        params.imageUri,
+        actualDimensions.height,
+        splitPositions
+      );
+      console.log(splitImages)
+      router.push({
+        pathname: "/preview",
+        params: {
+          images: JSON.stringify(splitImages),
+        },
+      });
+    } catch (error) {
+      console.error("Error splitting images:", error);
+      // You might want to show an error message to the user here
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
