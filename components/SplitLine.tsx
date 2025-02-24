@@ -1,49 +1,52 @@
 import { useState } from "react";
-import { StyleSheet, View, PanResponder, Pressable } from "react-native";
+import { StyleSheet, View, Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { COLORS } from "@/constants/Colors";
+import { PanGestureHandler, GestureHandlerRootView } from "react-native-gesture-handler";
 
 interface SplitLineProps {
   position: number;
   scaleFactor: number;
-  containerHeight: number;
-  onUpdatePosition: (position: number) => void;
+  width: number;
+  left: number;
+  onUpdatePosition: (moveY: number) => void;
   onRemoveSplit: () => void;
 }
 
 export const SplitLine = ({
   position,
   scaleFactor,
-  containerHeight,
+  width,
+  left,
   onUpdatePosition,
   onRemoveSplit,
 }: SplitLineProps) => {
-  const [lastPosition, setLastPosition] = useState(position);
   const [isDragging, setIsDragging] = useState(false);
 
-  const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
+  const handleGestureEvent = (event: any) => {
+    onUpdatePosition(event.nativeEvent.absoluteY);
+  };
 
-    onPanResponderGrant: () => {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      setIsDragging(true);
-    },
+  const handleGestureBegin = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setIsDragging(true);
+  };
 
-    onPanResponderMove: (_, gestureState) => {
-      // const newPosition = lastPosition + gestureState.dy / scaleFactor;
-      // const boundedPosition = Math.max(0, Math.min(newPosition, containerHeight / scaleFactor));
-      // onUpdatePosition(boundedPosition);
-      // setLastPosition(boundedPosition);
-    },
-
-    onPanResponderRelease: () => {
-      setIsDragging(false);
-    },
-  });
+  const handleGestureEnd = () => {
+    setIsDragging(false);
+  };
 
   return (
-    <View style={[styles.container, { top: position * scaleFactor }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          top: position * scaleFactor,
+          left: left,
+          width: width,
+        },
+      ]}>
       <Pressable
         onPress={() => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
@@ -57,15 +60,23 @@ export const SplitLine = ({
         <MaterialIcons name="delete" size={16} color={COLORS.background} />
       </Pressable>
       <View style={[styles.line, isDragging && styles.lineActive]} />
-      <View
-        style={[
-          styles.iconContainer,
-          styles.dragHandleIconContainer,
-          isDragging && styles.dragHandleIconContainerActive,
-        ]}
-        {...panResponder.panHandlers}>
-        <MaterialIcons name="drag-indicator" size={16} color={COLORS.background} />
-      </View>
+      <PanGestureHandler
+        onGestureEvent={handleGestureEvent}
+        onBegan={handleGestureBegin}
+        onEnded={handleGestureEnd}
+        onFailed={handleGestureEnd}
+        onCancelled={handleGestureEnd}
+        shouldCancelWhenOutside={false}
+        simultaneousHandlers={[]}>
+        <View
+          style={[
+            styles.iconContainer,
+            styles.dragHandleIconContainer,
+            isDragging && styles.dragHandleIconContainerActive,
+          ]}>
+          <MaterialIcons name="drag-indicator" size={16} color={COLORS.background} />
+        </View>
+      </PanGestureHandler>
     </View>
   );
 };
@@ -73,8 +84,6 @@ export const SplitLine = ({
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    left: 0,
-    right: 0,
     height: 1,
     flexDirection: "row",
     zIndex: 1,
