@@ -1,4 +1,5 @@
 import { StyleSheet, View, TouchableOpacity } from "react-native";
+import * as Haptics from "expo-haptics";
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
 
@@ -8,14 +9,23 @@ interface SplitActionsProps {
 }
 
 export const SplitActions = ({ onAddSplit, onRemoveAllSplits }: SplitActionsProps) => {
+  const handleRemoveAllSplits = () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+    onRemoveAllSplits();
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onRemoveAllSplits}>
-        <Text style={styles.removeText}>Remove All Splits</Text>
+      <TouchableOpacity onPress={handleRemoveAllSplits}>
+        <View style={styles.button}>
+          <Text style={styles.removeText}>Remove All Splits</Text>
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={onAddSplit}>
-        <Text style={styles.addText}>Add Split</Text>
+        <View style={styles.button}>
+          <Text style={styles.addText}>Add Split</Text>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -25,11 +35,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginBottom: 32,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: COLORS.border,
+  },
+  button: {
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    marginBottom: 32,
+    alignItems: "center",
   },
   removeText: {
     color: COLORS.secondary,
