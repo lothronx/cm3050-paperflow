@@ -1,10 +1,18 @@
 import { useState, useRef, useEffect } from "react";
-import { StyleSheet, View, Image, type LayoutChangeEvent } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  type LayoutChangeEvent,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import {
   ScrollView,
   PinchGestureHandler,
   GestureHandlerRootView,
+  PinchGestureHandlerGestureEvent,
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "@/constants/Colors";
@@ -77,10 +85,14 @@ export default function SplitScreen() {
     setImageContainerDimensions({ width, height });
   };
 
-  const handleScroll = (event: any) => {
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (isZoomedIn) {
       lastScrollPosition.current = event.nativeEvent.contentOffset.y;
     }
+  };
+
+  const handlePinchGesture = (event: PinchGestureHandlerGestureEvent) => {
+    handleZoom(event.nativeEvent.scale > 1);
   };
 
   const handleZoom = (newZoomState: boolean) => {
@@ -100,10 +112,6 @@ export default function SplitScreen() {
         }, 0);
       }
     }
-  };
-
-  const handlePinchGesture = (event: any) => {
-    handleZoom(event.nativeEvent.scale > 1);
   };
 
   const handleToggle = () => {
@@ -127,10 +135,10 @@ export default function SplitScreen() {
   };
 
   // Update the position of a specific split
-  const handleUpdateSplit = (index: number, moveY: number) => {
+  const handleUpdateSplit = (index: number, pointerY: number) => {
     const currentScrollPosition = isZoomedIn ? lastScrollPosition.current : 0;
     const newPositionOnImageDisplay =
-      Math.min(imageContainerDimensions.height, Math.max(0, moveY)) + currentScrollPosition;
+      Math.min(imageContainerDimensions.height, Math.max(0, pointerY)) + currentScrollPosition;
     const newPositionOnActualImage = newPositionOnImageDisplay / scaleFactor;
 
     const newSplits = [...splitPositions];
@@ -182,7 +190,7 @@ export default function SplitScreen() {
                   scaleFactor={scaleFactor}
                   width={splitLineWidth}
                   left={imageContainerDimensions.width / 2 - splitLineWidth / 2}
-                  onUpdatePosition={(moveY) => handleUpdateSplit(index, moveY)}
+                  onUpdatePosition={(pointerY) => handleUpdateSplit(index, pointerY)}
                   onRemoveSplit={() => handleRemoveSplit(index)}
                 />
               ))}

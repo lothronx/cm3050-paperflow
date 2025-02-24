@@ -3,7 +3,7 @@ import { StyleSheet, View, Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { COLORS } from "@/constants/Colors";
-import { PanGestureHandler, GestureHandlerRootView } from "react-native-gesture-handler";
+import { PanGestureHandler, PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 
 interface SplitLineProps {
   position: number;
@@ -24,7 +24,7 @@ export const SplitLine = ({
 }: SplitLineProps) => {
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleGestureEvent = (event: any) => {
+  const handleGestureEvent = (event: PanGestureHandlerGestureEvent) => {
     onUpdatePosition(event.nativeEvent.absoluteY);
   };
 
@@ -35,6 +35,11 @@ export const SplitLine = ({
 
   const handleGestureEnd = () => {
     setIsDragging(false);
+  };
+
+  const handleRemoveSplit = () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+    onRemoveSplit();
   };
 
   return (
@@ -48,10 +53,7 @@ export const SplitLine = ({
         },
       ]}>
       <Pressable
-        onPress={() => {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-          onRemoveSplit();
-        }}
+        onPress={handleRemoveSplit}
         style={({ pressed }) => [
           styles.iconContainer,
           styles.deleteIconContainer,
@@ -66,8 +68,8 @@ export const SplitLine = ({
         onEnded={handleGestureEnd}
         onFailed={handleGestureEnd}
         onCancelled={handleGestureEnd}
-        shouldCancelWhenOutside={false}
-        simultaneousHandlers={[]}>
+        minDist={0}
+        activeOffsetY={[-5, 5]}>
         <View
           style={[
             styles.iconContainer,
