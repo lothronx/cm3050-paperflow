@@ -69,11 +69,11 @@ export default function HomeScreen() {
       router.push({
         pathname: "/split",
         params: {
-          imageUri: result.assets[0].uri as string,
-          imageHeight: result.assets[0].height as number,
-          imageWidth: result.assets[0].width as number,
-          pageSize: pageSize as PageSize,
-          ocrString: ocr? "true" : "false",
+          imageUri: result.assets[0].uri,
+          imageHeight: result.assets[0].height,
+          imageWidth: result.assets[0].width,
+          pageSize: pageSize,
+          ocrString: ocr ? "true" : "false",
         },
       });
     }

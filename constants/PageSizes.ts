@@ -16,8 +16,8 @@ export const PageSizes = {
   },
   Manual: {
     id: "Manual",
-    width: 0,
-    height: 0,
+    width: NaN,
+    height: NaN,
   },
 } as const;
 

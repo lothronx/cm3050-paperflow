@@ -13,36 +13,58 @@ import { CheckArrow } from "@/components/CheckArrow";
 import { ZoomControl } from "@/components/ZoomControl";
 import { SplitActions } from "@/components/SplitActions";
 import { SplitLine } from "@/components/SplitLine";
+import { PageSizes, type PageSize } from "@/constants/PageSizes";
+
+type SplitScreenParams = {
+  imageUri: string;
+  imageHeight: string;
+  imageWidth: string;
+  pageSize: PageSize;
+  ocrString: string;
+};
 
 export default function SplitScreen() {
-  const { imageUri, imageHeight, imageWidth, pageSize, ocrString } = useLocalSearchParams();
-  const ocr = ocrString === "true";
-  const numImageWidth = Number(Array.isArray(imageWidth) ? imageWidth[0] : imageWidth);
-  const numImageHeight = Number(Array.isArray(imageHeight) ? imageHeight[0] : imageHeight);
-  const imageRatio = numImageWidth / numImageHeight;
+  const params = useLocalSearchParams<SplitScreenParams>();
+  const ocr: boolean = params.ocrString === "true";
+  const pageSize = params.pageSize;
+  const imageActualDimensions = {
+    width: Number(params.imageWidth),
+    height: Number(params.imageHeight),
+  };
+  const imageAspectRatio = imageActualDimensions.height / imageActualDimensions.width;
+  const pageAspectRatio = PageSizes[pageSize].height / PageSizes[pageSize].width;
 
   const scrollViewRef = useRef<ScrollView>(null);
   const lastScrollPosition = useRef(0);
 
   const [isProcessing, setIsProcessing] = useState(true);
   const [isZoomedIn, setIsZoomedIn] = useState(true);
-  const [splits, setSplits] = useState<number[]>([]);
+  const [scaleFactor, setScaleFactor] = useState(1);
+
+  // Stores vertical positions (in pixels) where the image will be split
+  // These positions use the original image dimensions, not the scaled display dimensions
+  const [splitPositions, setSplitPositions] = useState<number[]>([]);
+
   const [imageContainerDimensions, setImageContainerDimensions] = useState({ width: 0, height: 0 });
-  const [imageDimensions, setImageDimensions] = useState({
-    width: numImageWidth,
-    height: numImageHeight,
+  const [imageDisplayDimensions, setImageDisplayDimensions] = useState({
+    width: imageActualDimensions.width,
+    height: imageActualDimensions.height,
   });
 
   useEffect(() => {
-    setImageDimensions({
+    const newDisplayDimensions = {
       width: isZoomedIn
         ? imageContainerDimensions.width
-        : imageContainerDimensions.height * imageRatio,
+        : imageContainerDimensions.height / imageAspectRatio,
       height: isZoomedIn
-        ? imageContainerDimensions.width / imageRatio
+        ? imageContainerDimensions.width * imageAspectRatio
         : imageContainerDimensions.height,
-    });
-  }, [imageContainerDimensions, isZoomedIn, imageRatio]);
+    };
+    const newScaleFactor = newDisplayDimensions.height / imageActualDimensions.height;
+    
+    setImageDisplayDimensions(newDisplayDimensions);
+    setScaleFactor(newScaleFactor);
+  }, [imageContainerDimensions, isZoomedIn, imageAspectRatio]);
 
   const handleLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
@@ -83,22 +105,33 @@ export default function SplitScreen() {
   };
 
   const handleAddSplit = () => {
-    setSplits([...splits, 300]);
+    if (scrollViewRef.current) {
+      // Get the current scroll position
+      const currentScrollPosition = lastScrollPosition.current;
+      // Calculate the visible height based on the container dimensions
+      const visibleHeight = imageContainerDimensions.height;
+      // Calculate the middle position relative to the current scroll
+      const positionOnImageDisplay = currentScrollPosition + visibleHeight / 2;
+      // Convert the screen position to the actual image position
+      const positionOnActualImage = positionOnImageDisplay / scaleFactor;
+
+      setSplitPositions([...splitPositions, Math.round(positionOnActualImage)]);
+    }
   };
 
   const handleUpdateSplit = (index: number, position: number) => {
-    const newSplits = [...splits];
+    const newSplits = [...splitPositions];
     newSplits[index] = position;
-    setSplits(newSplits);
+    setSplitPositions(newSplits);
   };
 
   const handleRemoveSplit = (index: number) => {
-    const newSplits = splits.filter((_, i) => i !== index);
-    setSplits(newSplits);
+    const newSplits = splitPositions.filter((_, i) => i !== index);
+    setSplitPositions(newSplits);
   };
 
   const handleRemoveAllSplits = () => {
-    setSplits([]);
+    setSplitPositions([]);
   };
 
   const handlePreview = () => {
@@ -124,17 +157,18 @@ export default function SplitScreen() {
               scrollEventThrottle={16}
               showsVerticalScrollIndicator={isZoomedIn}>
               <Image
-                source={{ uri: imageUri as string }}
-                style={imageDimensions}
-                resizeMode="contain"
+                source={{ uri: params.imageUri }}
+                style={imageDisplayDimensions}
+                resizeMode="cover"
               />
-              {splits.map((position, index) => (
+              {splitPositions.map((position, index) => (
                 <SplitLine
                   key={index}
                   position={position}
+                  scaleFactor={scaleFactor}
+                  containerHeight={imageContainerDimensions.height}
                   onUpdatePosition={(newPosition) => handleUpdateSplit(index, newPosition)}
                   onRemoveSplit={() => handleRemoveSplit(index)}
-                  containerHeight={imageContainerDimensions.height}
                 />
               ))}
             </ScrollView>

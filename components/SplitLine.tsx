@@ -6,6 +6,7 @@ import { COLORS } from "@/constants/Colors";
 
 interface SplitLineProps {
   position: number;
+  scaleFactor: number;
   containerHeight: number;
   onUpdatePosition: (position: number) => void;
   onRemoveSplit: () => void;
@@ -13,6 +14,7 @@ interface SplitLineProps {
 
 export const SplitLine = ({
   position,
+  scaleFactor,
   containerHeight,
   onUpdatePosition,
   onRemoveSplit,
@@ -29,10 +31,10 @@ export const SplitLine = ({
     },
 
     onPanResponderMove: (_, gestureState) => {
-      const change = (gestureState.dy / containerHeight) * 100;
-      const newPosition = Math.max(0, Math.min(100, lastPosition + change));
-      onUpdatePosition(newPosition);
-      setLastPosition(newPosition);
+      // const newPosition = lastPosition + gestureState.dy / scaleFactor;
+      // const boundedPosition = Math.max(0, Math.min(newPosition, containerHeight / scaleFactor));
+      // onUpdatePosition(boundedPosition);
+      // setLastPosition(boundedPosition);
     },
 
     onPanResponderRelease: () => {
@@ -41,7 +43,7 @@ export const SplitLine = ({
   });
 
   return (
-    <View style={[styles.container, { top: position }]}>
+    <View style={[styles.container, { top: position * scaleFactor }]}>
       <Pressable
         onPress={() => {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
