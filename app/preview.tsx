@@ -11,12 +11,12 @@ import { manipulateAsync } from "expo-image-manipulator";
 import { type PageSize, PageSizes } from "@/constants/PageSizes";
 
 export default function PreviewScreen() {
-  const params = useLocalSearchParams<{ images: string }>();
+  const params = useLocalSearchParams<{ images: string; pageSize: PageSize }>();
 
   // Parse the stringified array of image URIs
   const images: string[] = params.images ? JSON.parse(params.images) : [];
 
-  const generatePdfForImages = async (uris: string[]) => {
+  const generatePdfForImages = async (uris: string[], pageSize: PageSize) => {
     const images = await Promise.all(uris.map((uri) => manipulateAsync(uri, [], { base64: true })));
 
     const html = `
@@ -25,28 +25,29 @@ export default function PreviewScreen() {
         <head>
           <meta charset="utf-8">
           <style>
-            @page {
-              margin: 0;
-              size: auto;
-            }
-            body {
+            * {
               margin: 0;
               padding: 0;
+              box-sizing: border-box;
+            }
+            body, html {
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              height: 100%;
             }
             .page {
-              width: 100vw;
-              height: 100vh;
-              display: flex;
-              justify-content: center;
-              align-items: center;
+              width: 100%;
+              height: 100%;
               page-break-after: always;
             }
             .page:last-child {
               page-break-after: avoid;
             }
             img {
-              max-width: 100%;
-              max-height: 100%;
+              display: block;
+              width: 100%;
+              height: 100%;
               object-fit: contain;
             }
           </style>
@@ -68,7 +69,8 @@ export default function PreviewScreen() {
     return Print.printToFileAsync({
       html,
       base64: false,
-      
+      height: PageSizes[params.pageSize].height,
+      width: PageSizes[params.pageSize].width,
     });
   };
 
@@ -77,7 +79,7 @@ export default function PreviewScreen() {
       if (type === "photos") {
       } else {
         // Generate PDF for first image (for testing)
-        const result = await generatePdfForImages(images);
+        const result = await generatePdfForImages(images, params.pageSize);
 
         await Sharing.shareAsync(result.uri, {
           mimeType: "application/pdf",

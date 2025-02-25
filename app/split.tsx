@@ -145,6 +145,7 @@ export default function SplitScreen() {
         pathname: "/preview",
         params: {
           images: JSON.stringify(splitImages),
+          pageSize: params.pageSize,
         },
       });
     } catch (error) {
