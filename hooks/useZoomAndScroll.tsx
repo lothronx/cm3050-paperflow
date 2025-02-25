@@ -6,10 +6,12 @@ import { ScrollView } from "react-native-gesture-handler";
 export const useZoomAndScroll = (scrollViewRef: React.RefObject<ScrollView>) => {
   const [isZoomedIn, setIsZoomedIn] = useState(true);
   const lastScrollPosition = useRef(0);
+  const [currentScrollPosition, setCurrentScrollPosition] = useState(0);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (isZoomedIn) {
       lastScrollPosition.current = event.nativeEvent.contentOffset.y;
+      setCurrentScrollPosition(lastScrollPosition.current);
     }
   };
 
@@ -20,6 +22,7 @@ export const useZoomAndScroll = (scrollViewRef: React.RefObject<ScrollView>) => 
       if (!newZoomState) {
         // Zooming out - scroll to top
         scrollViewRef.current.scrollTo({ y: 0, animated: false });
+        setCurrentScrollPosition(0);
       } else {
         // Zooming in - restore previous position
         setTimeout(() => {
@@ -28,14 +31,10 @@ export const useZoomAndScroll = (scrollViewRef: React.RefObject<ScrollView>) => 
             animated: false,
           });
         }, 0);
+        setCurrentScrollPosition(lastScrollPosition.current);
       }
     }
   };
 
-  const getCurrentScrollPosition = () => {
-    const currentScrollPosition = isZoomedIn ? lastScrollPosition.current : 0;
-    return currentScrollPosition;
-  };
-
-  return { isZoomedIn, getCurrentScrollPosition, handleScroll, handleZoom };
+  return { handleScroll, handleZoom, isZoomedIn, currentScrollPosition };
 };

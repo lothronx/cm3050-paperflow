@@ -10,16 +10,15 @@ import { useLocalSearchParams, router } from "expo-router";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import { COLORS } from "@/constants/Colors";
 import { PageSizes, type PageSize } from "@/constants/PageSizes";
+import type { ImageDimensions } from "@/types/ImageDimensions";
 import { BackArrow } from "@/components/BackArrow";
 import { CheckArrow } from "@/components/CheckArrow";
 import { ZoomControl } from "@/components/ZoomControl";
 import { SplitActions } from "@/components/SplitActions";
 import { SplitLine } from "@/components/SplitLine";
 import { useZoomAndScroll } from "@/hooks/useZoomAndScroll";
-import calculateDisplayDimensions, {
-  type ImageDimensions,
-} from "@/utils/calculateDisplayDimensions";
-import calculateSplitLineWidth from "@/utils/calculateSplitLineWidth";
+import { calculateImageDisplay } from "@/utils/calculateImageDisplay";
+import { calculateSplitLineDisplay } from "@/utils/calculateSplitLineDisplay";
 
 export default function SplitScreen() {
   const params = useLocalSearchParams<{
@@ -32,29 +31,28 @@ export default function SplitScreen() {
 
   const scrollViewRef = useRef<ScrollView>(null);
   const [isProcessing, setIsProcessing] = useState(true);
+  const [splitPositions, setSplitPositions] = useState<number[]>([]);
+
   const [containerDimensions, setContainerDimensions] = useState<ImageDimensions>({
     width: 0,
     height: 0,
   });
-  const [splitPositions, setSplitPositions] = useState<number[]>([]);
 
   const actualDimensions: ImageDimensions = {
     width: Number(params.imageWidth),
     height: Number(params.imageHeight),
   };
 
-  const { isZoomedIn, getCurrentScrollPosition, handleScroll, handleZoom } =
+  const { handleScroll, handleZoom, isZoomedIn, currentScrollPosition } =
     useZoomAndScroll(scrollViewRef);
-    
-  const displayDimensions = calculateDisplayDimensions(
+
+  const displayDimensions = calculateImageDisplay(
     actualDimensions,
     containerDimensions,
     isZoomedIn
   );
-  const { width: splitLineWidth, left: splitLineLeft } = calculateSplitLineWidth(
-    displayDimensions,
-    containerDimensions
-  );
+  
+  const splitLineDisplay = calculateSplitLineDisplay(displayDimensions, containerDimensions);
 
   const scaleFactor = displayDimensions.height / actualDimensions.height;
 
@@ -66,7 +64,7 @@ export default function SplitScreen() {
   const handleAddSplit = () => {
     if (scrollViewRef.current) {
       const visibleHeight = containerDimensions.height;
-      const positionOnImageDisplay = getCurrentScrollPosition() + visibleHeight / 2;
+      const positionOnImageDisplay = currentScrollPosition + visibleHeight / 2;
       const positionOnActualImage = positionOnImageDisplay / scaleFactor;
 
       setSplitPositions([...splitPositions, Math.round(positionOnActualImage)]);
@@ -75,7 +73,7 @@ export default function SplitScreen() {
 
   const handleUpdateSplit = (index: number, pointerY: number) => {
     const newPositionOnViewport = Math.min(containerDimensions.height, Math.max(0, pointerY));
-    const newPositionOnImageDisplay = newPositionOnViewport + getCurrentScrollPosition();
+    const newPositionOnImageDisplay = newPositionOnViewport + currentScrollPosition;
     const newPositionOnActualImage = newPositionOnImageDisplay / scaleFactor;
 
     const newSplits = [...splitPositions];
@@ -186,8 +184,8 @@ export default function SplitScreen() {
                   key={index}
                   position={position}
                   scaleFactor={scaleFactor}
-                  width={splitLineWidth}
-                  left={splitLineLeft}
+                  width={splitLineDisplay.width}
+                  left={splitLineDisplay.left}
                   onUpdatePosition={(pointerY) => handleUpdateSplit(index, pointerY)}
                   onRemoveSplit={() => handleRemoveSplit(index)}
                 />
