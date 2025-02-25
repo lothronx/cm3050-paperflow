@@ -12,6 +12,7 @@ export default function RootLayout() {
       await Font.loadAsync({
         Playfair: require("@/assets/fonts/PlayfairDisplay-BlackItalic.ttf"),
         Montserrat: require("@/assets/fonts/Montserrat-VariableFont_wght.ttf"),
+        PangMenZhengDao: require("@/assets/fonts/PangMenZhengDaoBiaoTiTi.ttf"),
       });
       setFontsLoaded(true);
     }

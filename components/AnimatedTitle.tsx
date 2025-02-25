@@ -5,8 +5,22 @@ import { useTranslation } from "react-i18next";
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
 
+const useLanguageStyles = () => {
+  const { i18n } = useTranslation();
+
+  const isChinese = i18n.language === "zh";
+
+  return StyleSheet.create({
+    title: {
+      fontSize: isChinese ? 62 : 48,
+      fontFamily: isChinese ? "PangMenZhengDao" : "Playfair",
+    },
+  });
+};
+
 export const AnimatedTitle = () => {
   const { t } = useTranslation();
+  const languageStyles = useLanguageStyles();
 
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(-100);
@@ -32,8 +46,10 @@ export const AnimatedTitle = () => {
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{t("home.title1")}</Text>
-        <Text style={[styles.title, styles.titleHighlight]}>{t("home.title2")}</Text>
+        <Text style={[styles.title, languageStyles.title]}>{t("home.title1")}</Text>
+        <Text style={[styles.title, styles.titleHighlight, languageStyles.title]}>
+          {t("home.title2")}
+        </Text>
       </View>
       <Text style={styles.subtitle}>{t("home.subTitle")}</Text>
     </Animated.View>

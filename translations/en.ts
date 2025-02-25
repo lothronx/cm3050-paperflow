@@ -13,6 +13,9 @@ export default {
     autoSplitTooltip: "Enable automatic image splitting according to the selected page size",
     selectImage: "Select Image",
   },
+  modal:{
+    title: "Select Page Size",
+  },
   split: {
     removeAllSplits: "Remove All Splits",
     addSplit: "Add Split",

@@ -1,4 +1,5 @@
 import { StyleSheet, TouchableOpacity, Modal, FlatList, SafeAreaView, View } from "react-native";
+import { useTranslation } from "react-i18next";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
 import type { PageSize } from "@/types/PageSize";
@@ -19,13 +20,15 @@ export const PageSizeModal = ({
   value,
   options,
 }: PageSizeModalProps) => {
+  const { t } = useTranslation();
+
   return (
     <Modal visible={isVisible} transparent animationType="slide" onRequestClose={onClose}>
       <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={onClose}>
         <SafeAreaView style={styles.modalContent}>
           <TouchableOpacity activeOpacity={1}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Page Size</Text>
+              <Text style={styles.modalTitle}>{t("modal.title")}</Text>
               <TouchableOpacity onPress={onClose}>
                 <Ionicons name="close" size={24} color={COLORS.text} />
               </TouchableOpacity>
