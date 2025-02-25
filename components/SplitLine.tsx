@@ -45,33 +45,34 @@ export const SplitLine = ({
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          top: positionDisplay,
-          width: splitLineWidth,
-          transform: [{ translateX: -splitLineWidth / 2 }],
-        },
-      ]}>
-      <Pressable
-        onPress={handleRemoveSplit}
-        style={({ pressed }) => [
-          styles.iconContainer,
-          styles.deleteIconContainer,
-          pressed && styles.deleteIconContainerActive,
+    <PanGestureHandler
+      onGestureEvent={handleGestureEvent}
+      onBegan={handleGestureBegin}
+      onEnded={handleGestureEnd}
+      onFailed={handleGestureEnd}
+      onCancelled={handleGestureEnd}
+      minDist={0}
+      activeOffsetY={[-5, 5]}>
+      <View
+        style={[
+          styles.container,
+          {
+            top: positionDisplay,
+            width: splitLineWidth,
+            transform: [{ translateX: -splitLineWidth / 2 }],
+          },
         ]}>
-        <MaterialIcons name="delete" size={16} color={COLORS.background} />
-      </Pressable>
-      <View style={[styles.line, isDragging && styles.lineActive]} />
-      <PanGestureHandler
-        onGestureEvent={handleGestureEvent}
-        onBegan={handleGestureBegin}
-        onEnded={handleGestureEnd}
-        onFailed={handleGestureEnd}
-        onCancelled={handleGestureEnd}
-        minDist={0}
-        activeOffsetY={[-5, 5]}>
+        <Pressable
+          onPress={handleRemoveSplit}
+          style={({ pressed }) => [
+            styles.iconContainer,
+            styles.deleteIconContainer,
+            pressed && styles.deleteIconContainerActive,
+          ]}>
+          <MaterialIcons name="delete" size={16} color={COLORS.background} />
+        </Pressable>
+        <View style={[styles.line, isDragging && styles.lineActive]} />
+
         <View
           style={[
             styles.iconContainer,
@@ -80,11 +81,12 @@ export const SplitLine = ({
           ]}>
           <MaterialIcons name="drag-indicator" size={16} color={COLORS.background} />
         </View>
-      </PanGestureHandler>
-      <View style={[styles.iconContainer, styles.indexContainer]}>
-        <Text style={styles.index}>{index}</Text>
+
+        <View style={[styles.iconContainer, styles.indexContainer]}>
+          <Text style={styles.index}>{index}</Text>
+        </View>
       </View>
-    </View>
+    </PanGestureHandler>
   );
 };
 
