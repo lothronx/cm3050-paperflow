@@ -17,8 +17,8 @@ export default {
     title: "选择页面尺寸",
   },
   split: {
-    removeAllSplits: "清除所有分割",
-    addSplit: "新增分割",
+    removeAllSplits: "清除所有分割线",
+    addSplit: "添加分割线",
   },
   preview: {
     savePhotos: "保存至相册",
