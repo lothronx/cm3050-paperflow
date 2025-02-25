@@ -25,6 +25,9 @@ export default function PreviewScreen() {
         <head>
           <meta charset="utf-8">
           <style>
+            @page {
+              margin: 0;
+            }
             * {
               margin: 0;
               padding: 0;
@@ -69,31 +72,33 @@ export default function PreviewScreen() {
     return Print.printToFileAsync({
       html,
       base64: false,
-      height: PageSizes[params.pageSize].height,
-      width: PageSizes[params.pageSize].width,
+      height: PageSizes[pageSize].height,
+      width: PageSizes[pageSize].width,
+      margins: {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+      },
     });
   };
 
-  const handleShare = async (type: "photos" | "pdf") => {
+  const handleSharePDF = async () => {
     try {
-      if (type === "photos") {
-      } else {
-        // Generate PDF for first image (for testing)
-        const result = await generatePdfForImages(images, params.pageSize);
+      const result = await generatePdfForImages(images, params.pageSize);
 
-        await Sharing.shareAsync(result.uri, {
-          mimeType: "application/pdf",
-          dialogTitle: "Share PDF",
-          UTI: "com.adobe.pdf",
-        });
-      }
+      await Sharing.shareAsync(result.uri, {
+        mimeType: "application/pdf",
+        dialogTitle: "Share PDF",
+        UTI: "com.adobe.pdf",
+      });
     } catch (error) {
       console.error("Error sharing:", error);
       alert("Failed to share. Please try again.");
     }
   };
 
-  const handleSave = async () => {
+  const handleSavePhotos = async () => {
     try {
       // Implement saving logic
       console.log(images);
@@ -112,24 +117,23 @@ export default function PreviewScreen() {
       resizeMode="cover">
       <SafeAreaView style={styles.container}>
         <BackArrow />
-        <View style={styles.content}>
-          <ImageSwiper images={images} />
 
-          <View style={styles.buttonContainer}>
-            <CustomButton
-              text="Share as Photos"
-              onPress={() => handleShare("photos")}
-              variant="outline"
-              icon={<Ionicons name="images-outline" size={20} color={COLORS.primary} />}
-            />
-            <CustomButton
-              text="Share as PDF"
-              onPress={() => handleShare("pdf")}
-              variant="outline"
-              icon={<Ionicons name="document-outline" size={20} color={COLORS.primary} />}
-            />
-            <CustomButton text="Done" onPress={handleDone} />
-          </View>
+        <ImageSwiper images={images} />
+
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            text="Save as Photos"
+            onPress={handleSavePhotos}
+            variant="outline"
+            icon={<Ionicons name="images-outline" size={20} color={COLORS.primary} />}
+          />
+          <CustomButton
+            text="Share as PDF"
+            onPress={handleSharePDF}
+            variant="outline"
+            icon={<Ionicons name="document-outline" size={20} color={COLORS.primary} />}
+          />
+          <CustomButton text="Done" onPress={handleDone} />
         </View>
       </SafeAreaView>
     </ImageBackground>
@@ -142,9 +146,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   container: {
-    flex: 1,
-  },
-  content: {
     flex: 1,
   },
   buttonContainer: {

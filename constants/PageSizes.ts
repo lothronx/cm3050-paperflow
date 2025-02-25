@@ -1,23 +1,23 @@
 export const PageSizes = {
   A4: {
     id: "A4",
-    width: 210,
-    height: 297,
+    width: 595, //Postscript units, not cm
+    height: 842,
   },
   Letter: {
     id: "Letter",
-    width: 215.9,
-    height: 279.4,
+    width: 612,
+    height: 792,
   },
   Legal: {
     id: "Legal",
-    width: 215.9,
-    height: 355.6,
+    width: 612,
+    height: 1008,
   },
   Manual: {
     id: "Manual",
-    width: NaN,
-    height: NaN,
+    width: 595,
+    height: 842,
   },
 } as const;
 
