@@ -6,19 +6,18 @@ import { COLORS } from "@/constants/Colors";
 import { PanGestureHandler, PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 
 interface SplitLineProps {
-  position: number;
-  scaleFactor: number;
-  width: number;
-  left: number;
+  positionDisplay: number;
+  splitLineDisplay: {
+    width: number;
+    left: number;
+  };
   onUpdatePosition: (moveY: number) => void;
   onRemoveSplit: () => void;
 }
 
 export const SplitLine = ({
-  position,
-  scaleFactor,
-  width,
-  left,
+  positionDisplay,
+  splitLineDisplay,
   onUpdatePosition,
   onRemoveSplit,
 }: SplitLineProps) => {
@@ -47,9 +46,8 @@ export const SplitLine = ({
       style={[
         styles.container,
         {
-          top: position * scaleFactor,
-          left: left,
-          width: width,
+          top: positionDisplay,
+          ...splitLineDisplay,
         },
       ]}>
       <Pressable

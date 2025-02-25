@@ -16,8 +16,7 @@ import { ZoomControl } from "@/components/ZoomControl";
 import { SplitActions } from "@/components/SplitActions";
 import { SplitLine } from "@/components/SplitLine";
 import { useZoomAndScroll } from "@/hooks/useZoomAndScroll";
-import { calculateImageDisplay } from "@/utils/calculateImageDisplay";
-import { calculateSplitLineDisplay } from "@/utils/calculateSplitLineDisplay";
+import { useImageCalculations } from "@/hooks/useImageCalculation";
 import { splitImage } from "@/utils/splitImage";
 
 export default function SplitScreen() {
@@ -30,31 +29,29 @@ export default function SplitScreen() {
   }>();
 
   const scrollViewRef = useRef<ScrollView>(null);
-  const [isProcessing, setIsProcessing] = useState(true);
-  const [splitPositions, setSplitPositions] = useState<number[]>([]);
 
-  const [containerDimensions, setContainerDimensions] = useState<ImageDimensions>({
-    width: 0,
-    height: 0,
-  });
+  const [isProcessing, setIsProcessing] = useState(true);
+
+  const [splitPositions, setSplitPositions] = useState<number[]>([]);
 
   const actualDimensions: ImageDimensions = {
     width: Number(params.imageWidth),
     height: Number(params.imageHeight),
   };
 
+  const [containerDimensions, setContainerDimensions] = useState<ImageDimensions>({
+    width: 0,
+    height: 0,
+  });
+
   const { handleScroll, handleZoom, isZoomedIn, currentScrollPosition } =
     useZoomAndScroll(scrollViewRef);
 
-  const displayDimensions = calculateImageDisplay(
+  const { displayDimensions, splitLineDisplay, scaleFactor } = useImageCalculations({
     actualDimensions,
     containerDimensions,
-    isZoomedIn
-  );
-
-  const splitLineDisplay = calculateSplitLineDisplay(displayDimensions, containerDimensions);
-
-  const scaleFactor = displayDimensions.height / actualDimensions.height;
+    isZoomedIn,
+  });
 
   const handleLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
@@ -129,10 +126,8 @@ export default function SplitScreen() {
               {splitPositions.map((position, index) => (
                 <SplitLine
                   key={index}
-                  position={position}
-                  scaleFactor={scaleFactor}
-                  width={splitLineDisplay.width}
-                  left={splitLineDisplay.left}
+                  positionDisplay={position * scaleFactor}
+                  splitLineDisplay={splitLineDisplay}
                   onUpdatePosition={(pointerY) => handleUpdateSplit(index, pointerY)}
                   onRemoveSplit={() => handleRemoveSplit(index)}
                 />
