@@ -7,7 +7,6 @@ import {
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, router } from "expo-router";
-import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import { COLORS } from "@/constants/Colors";
 import { PageSizes, type PageSize } from "@/constants/PageSizes";
 import type { ImageDimensions } from "@/types/ImageDimensions";
@@ -19,6 +18,7 @@ import { SplitLine } from "@/components/SplitLine";
 import { useZoomAndScroll } from "@/hooks/useZoomAndScroll";
 import { calculateImageDisplay } from "@/utils/calculateImageDisplay";
 import { calculateSplitLineDisplay } from "@/utils/calculateSplitLineDisplay";
+import { splitImage } from "@/utils/splitImage";
 
 export default function SplitScreen() {
   const params = useLocalSearchParams<{
@@ -51,7 +51,7 @@ export default function SplitScreen() {
     containerDimensions,
     isZoomedIn
   );
-  
+
   const splitLineDisplay = calculateSplitLineDisplay(displayDimensions, containerDimensions);
 
   const scaleFactor = displayDimensions.height / actualDimensions.height;
@@ -90,67 +90,14 @@ export default function SplitScreen() {
     setSplitPositions([]);
   };
 
-  const splitImage = async (imageUri: string, positions: number[]) => {
-    const sortedPositions = [...positions]
-      .sort((a, b) => a - b)
-      .reduce((acc: number[], curr: number) => {
-        if (acc.length === 0 || curr - acc[acc.length - 1] >= 10) {
-          acc.push(curr);
-        }
-        return acc;
-      }, []);
-    const images: string[] = [];
-
-    let startY = 0;
-    for (const position of sortedPositions) {
-      const result = await manipulateAsync(
-        imageUri,
-        [
-          {
-            crop: {
-              originX: 0,
-              originY: startY,
-              width: actualDimensions.width,
-              height: position - startY,
-            },
-          },
-        ],
-        { compress: 1, format: SaveFormat.JPEG }
-      );
-      images.push(result.uri);
-      startY = position;
-    }
-
-    // Handle the last segment
-    if (startY < actualDimensions.height) {
-      const result = await manipulateAsync(
-        imageUri,
-        [
-          {
-            crop: {
-              originX: 0,
-              originY: startY,
-              width: actualDimensions.width,
-              height: actualDimensions.height - startY,
-            },
-          },
-        ],
-        { compress: 1, format: SaveFormat.JPEG }
-      );
-      images.push(result.uri);
-    }
-
-    return images;
-  };
-
   const handlePreview = async () => {
     try {
-      const splitImages = await splitImage(params.imageUri, splitPositions);
+      const result = await splitImage(params.imageUri, splitPositions, actualDimensions);
 
       router.push({
         pathname: "/preview",
         params: {
-          images: JSON.stringify(splitImages),
+          images: JSON.stringify(result),
           pageSize: params.pageSize,
         },
       });
