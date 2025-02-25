@@ -64,24 +64,21 @@ export default function SplitScreen() {
   };
 
   useEffect(() => {
-    if (params.pageSize != "Manual") {
-      const ratio =
-        (actualDimensions.height * pageDimensions.width) /
-        (actualDimensions.width * pageDimensions.height);
+    if (params.pageSize == "Manual") return;
 
-      const numSplits = Math.floor(ratio);
+    const imageAspectRatio = actualDimensions.height / actualDimensions.width;
+    const pageAspectRatio = pageDimensions.height / pageDimensions.width;
+    const numSplits = Math.floor(imageAspectRatio / pageAspectRatio);
 
-      if (numSplits > 0) {
-        const newSplitPositions = [];
-        for (let i = 1; i <= numSplits; i++) {
-          const position =
-            (i * actualDimensions.width * pageDimensions.height) / pageDimensions.width;
-          newSplitPositions.push(position);
-        }
-        setSplitPositions(newSplitPositions);
+    if (numSplits > 0) {
+      const newSplitPositions = [];
+      for (let i = 1; i <= numSplits; i++) {
+        const position = i * actualDimensions.width * pageAspectRatio;
+        newSplitPositions.push(position);
       }
+      setSplitPositions(newSplitPositions);
     }
-  }, [actualDimensions.height, params.pageSize]);
+  }, [params.imageUri, params.pageSize, params.ocrString]);
 
   const handleAddSplit = () => {
     if (scrollViewRef.current) {
