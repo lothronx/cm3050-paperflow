@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { StyleSheet, View, Image, Alert, type LayoutChangeEvent } from "react-native";
 import {
   ScrollView,
@@ -15,6 +15,7 @@ import { CheckArrow } from "@/components/CheckArrow";
 import { ZoomControl } from "@/components/ZoomControl";
 import { SplitActions } from "@/components/SplitActions";
 import { SplitLine } from "@/components/SplitLine";
+import { LoadingIndicator } from "@/components/LoadingIndicator";
 import { useZoomAndScroll } from "@/hooks/useZoomAndScroll";
 import { useImageCalculations } from "@/hooks/useImageCalculation";
 import { splitImage } from "@/utils/splitImage";
@@ -30,7 +31,7 @@ export default function SplitScreen() {
 
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const [isProcessing, setIsProcessing] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const [splitPositions, setSplitPositions] = useState<number[]>([]);
 
@@ -38,6 +39,8 @@ export default function SplitScreen() {
     width: Number(params.imageWidth),
     height: Number(params.imageHeight),
   };
+
+  const pageDimensions: ImageDimensions = PageSizes[params.pageSize];
 
   const [containerDimensions, setContainerDimensions] = useState<ImageDimensions>({
     width: 0,
@@ -59,6 +62,26 @@ export default function SplitScreen() {
     const { width, height } = event.nativeEvent.layout;
     setContainerDimensions({ width, height });
   };
+
+  useEffect(() => {
+    if (params.pageSize != "Manual") {
+      const ratio =
+        (actualDimensions.height * pageDimensions.width) /
+        (actualDimensions.width * pageDimensions.height);
+
+      const numSplits = Math.floor(ratio);
+
+      if (numSplits > 0) {
+        const newSplitPositions = [];
+        for (let i = 1; i <= numSplits; i++) {
+          const position =
+            (i * actualDimensions.width * pageDimensions.height) / pageDimensions.width;
+          newSplitPositions.push(position);
+        }
+        setSplitPositions(newSplitPositions);
+      }
+    }
+  }, [actualDimensions.height, params.pageSize]);
 
   const handleAddSplit = () => {
     if (scrollViewRef.current) {
@@ -100,6 +123,8 @@ export default function SplitScreen() {
 
   const handlePreview = async () => {
     try {
+      setIsProcessing(true);
+
       const result = await splitImage(params.imageUri, splitPositions, actualDimensions);
 
       router.push({
@@ -111,42 +136,50 @@ export default function SplitScreen() {
       });
     } catch (error) {
       Alert.alert("Error", "Failed to split images. Please try again.");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   return (
     <GestureHandlerRootView style={styles.container}>
+      {isProcessing && <LoadingIndicator />}
+      <BackArrow />
+      <CheckArrow onClick={handlePreview} />
+
       <SafeAreaView style={styles.container}>
-        <BackArrow />
-        <CheckArrow onClick={handlePreview} />
-        <View style={styles.innerContainer} onLayout={handleLayout}>
-          <ZoomControl isZoomedIn={isZoomedIn} onToggle={() => handleZoom(!isZoomedIn)} />
-          <PinchGestureHandler onGestureEvent={(event) => handleZoom(event.nativeEvent.scale > 1)}>
-            <ScrollView
-              ref={scrollViewRef}
-              style={styles.innerContainer}
-              contentContainerStyle={styles.scrollContainer}
-              onScroll={handleScroll}
-              scrollEventThrottle={16}
-              showsVerticalScrollIndicator={isZoomedIn}>
-              <Image
-                source={{ uri: params.imageUri }}
-                style={displayDimensions}
-                resizeMode="cover"
-              />
-              {splitPositions.map((position, index) => (
-                <SplitLine
-                  key={index}
-                  positionDisplay={position * scaleFactor}
-                  splitLineDisplay={splitLineDisplay}
-                  onUpdatePosition={(pointerY) => handleUpdateSplit(index, pointerY)}
-                  onRemoveSplit={() => handleRemoveSplit(index)}
+        <View style={styles.container}>
+          <View style={styles.innerContainer} onLayout={handleLayout}>
+            <ZoomControl isZoomedIn={isZoomedIn} onToggle={() => handleZoom(!isZoomedIn)} />
+            <PinchGestureHandler
+              onGestureEvent={(event) => handleZoom(event.nativeEvent.scale > 1)}>
+              <ScrollView
+                ref={scrollViewRef}
+                style={styles.innerContainer}
+                contentContainerStyle={styles.scrollContainer}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+                showsVerticalScrollIndicator={isZoomedIn}>
+                <Image
+                  source={{ uri: params.imageUri }}
+                  style={displayDimensions}
+                  resizeMode="cover"
                 />
-              ))}
-            </ScrollView>
-          </PinchGestureHandler>
+                {splitPositions.map((position, index) => (
+                  <SplitLine
+                    key={index}
+                    positionDisplay={position * scaleFactor}
+                    splitLineDisplay={splitLineDisplay}
+                    onUpdatePosition={(pointerY) => handleUpdateSplit(index, pointerY)}
+                    onRemoveSplit={() => handleRemoveSplit(index)}
+                  />
+                ))}
+              </ScrollView>
+            </PinchGestureHandler>
+          </View>
+
+          <SplitActions onAddSplit={handleAddSplit} onRemoveAllSplits={handleRemoveAllSplits} />
         </View>
-        <SplitActions onAddSplit={handleAddSplit} onRemoveAllSplits={handleRemoveAllSplits} />
       </SafeAreaView>
     </GestureHandlerRootView>
   );

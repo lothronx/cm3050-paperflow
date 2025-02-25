@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { StyleSheet, View, SafeAreaView, ImageBackground, Alert, Platform } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
@@ -8,6 +9,7 @@ import { type PageSize } from "@/constants/PageSizes";
 import { BackArrow } from "@/components/BackArrow";
 import { ImageSwiper } from "@/components/ImageSwiper";
 import { CustomButton } from "@/components/CustomButton";
+import { LoadingIndicator } from "@/components/LoadingIndicator";
 import generatePdfFromImages from "@/utils/generatePdfFromImages";
 
 export default function PreviewScreen() {
@@ -17,9 +19,12 @@ export default function PreviewScreen() {
   const images: string[] = params.images ? JSON.parse(params.images) : [];
 
   const [status, requestPermission] = MediaLibrary.usePermissions();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSharePDF = async () => {
     try {
+      setIsProcessing(true);
+
       const result = await generatePdfFromImages(images, params.pageSize);
 
       await Sharing.shareAsync(result.uri, {
@@ -29,6 +34,8 @@ export default function PreviewScreen() {
       });
     } catch (error) {
       Alert.alert("Failed to share. Please try again.");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -73,6 +80,7 @@ export default function PreviewScreen() {
       source={require("@/assets/images/background.jpeg")}
       style={styles.backgroundImage}
       resizeMode="cover">
+      {isProcessing && <LoadingIndicator />}
       <SafeAreaView style={styles.container}>
         <BackArrow />
 
