@@ -5,7 +5,7 @@ import {
   PinchGestureHandler,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams, router } from "expo-router";
 import { COLORS } from "@/constants/Colors";
 import { PageSizes, type PageSize } from "@/constants/PageSizes";
@@ -44,6 +44,8 @@ export default function SplitScreen() {
     height: 0,
   });
 
+  const topSpacing = useSafeAreaInsets().top;
+
   const { handleScroll, handleZoom, isZoomedIn, currentScrollPosition } =
     useZoomAndScroll(scrollViewRef);
 
@@ -69,7 +71,10 @@ export default function SplitScreen() {
   };
 
   const handleUpdateSplit = (index: number, pointerY: number) => {
-    const newPositionOnViewport = Math.min(containerDimensions.height, Math.max(0, pointerY));
+    const newPositionOnViewport = Math.min(
+      containerDimensions.height,
+      Math.max(0, pointerY - topSpacing)
+    );
     const newPositionOnImageDisplay = newPositionOnViewport + currentScrollPosition;
     const newPositionOnActualImage = newPositionOnImageDisplay / scaleFactor;
 
@@ -105,7 +110,7 @@ export default function SplitScreen() {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <SafeAreaView style={styles.container} edges={["bottom"]}>
+      <SafeAreaView style={styles.container}>
         <BackArrow />
         <CheckArrow onClick={handlePreview} />
         <View style={styles.innerContainer} onLayout={handleLayout}>
