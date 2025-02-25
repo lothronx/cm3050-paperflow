@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from "react-native-reanimated";
+import { useTranslation } from "react-i18next";
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
 
 export const AnimatedTitle = () => {
+  const { t } = useTranslation();
+
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(-100);
 
@@ -29,10 +32,10 @@ export const AnimatedTitle = () => {
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Paper</Text>
-        <Text style={[styles.title, styles.titleHighlight]}>Flow</Text>
+        <Text style={styles.title}>{t("home.title1")}</Text>
+        <Text style={[styles.title, styles.titleHighlight]}>{t("home.title2")}</Text>
       </View>
-      <Text style={styles.subtitle}>Split Long Image for Printing</Text>
+      <Text style={styles.subtitle}>{t("home.subTitle")}</Text>
     </Animated.View>
   );
 };

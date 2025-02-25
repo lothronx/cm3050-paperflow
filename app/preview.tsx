@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StyleSheet, View, SafeAreaView, ImageBackground, Alert } from "react-native";
+import { useTranslation } from "react-i18next";
 import { router, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,6 +15,8 @@ import { useMediaLibrary } from "@/hooks/useMediaLibrary";
 
 export default function PreviewScreen() {
   const params = useLocalSearchParams<{ images: string; pageSize: PageSize }>();
+
+  const { t } = useTranslation();
 
   // Parse the stringified array of image URIs
   const images: string[] = params.images ? JSON.parse(params.images) : [];
@@ -66,18 +69,18 @@ export default function PreviewScreen() {
 
         <View style={styles.buttonContainer}>
           <CustomButton
-            text="Save Photos"
+            text={t("preview.savePhotos")}
             onPress={handleSavePhotos}
             variant="outline"
             icon={<Ionicons name="images-outline" size={20} color={COLORS.primary} />}
           />
           <CustomButton
-            text="Share PDF"
+            text={t("preview.sharePDF")}
             onPress={handleSharePDF}
             variant="outline"
             icon={<Ionicons name="document-outline" size={20} color={COLORS.primary} />}
           />
-          <CustomButton text="Done" onPress={handleDone} />
+          <CustomButton text={t("preview.done")} onPress={handleDone} />
         </View>
       </SafeAreaView>
     </ImageBackground>

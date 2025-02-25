@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
+import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import type { PageSize } from "@/types/PageSize";
@@ -11,6 +12,8 @@ import { CustomButton } from "@/components/CustomButton";
 import { StorageService } from "@/services/storage";
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
+
   const [autoSplit, setAutoSplit] = useState(true);
   const [pageSize, setPageSize] = useState<PageSize>("A4");
 
@@ -64,21 +67,21 @@ export default function HomeScreen() {
 
           <View style={styles.settings}>
             <PageSizeOption
-              title="Page Size"
-              tooltip="Select the page size for splitting your image"
+              title={t("home.pageSize")}
+              tooltip={t("home.pageSizeTooltip")}
               defaultValue={pageSize}
               onValueChange={handlePageSizeChange}
             />
             <AutoSplitOption
-              title="Auto Split"
-              tooltip="Enable automatic image splitting according to the selected page size"
+              title={t("home.autoSplit")}
+              tooltip={t("home.autoSplitTooltip")}
               defaultValue={autoSplit}
               onValueChange={handleAutoSplitChange}
             />
           </View>
 
           <View style={styles.buttonContainer}>
-            <CustomButton text="Select Image" onPress={handleSelectImage} />
+            <CustomButton text={t("home.selectImage")} onPress={handleSelectImage} />
           </View>
         </View>
       </SafeAreaView>
