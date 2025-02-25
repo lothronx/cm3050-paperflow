@@ -1,9 +1,10 @@
-import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
+import { StyleSheet, View, SafeAreaView, ImageBackground, Alert } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
+import * as MediaLibrary from "expo-media-library";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
-import { type PageSize, PageSizes } from "@/constants/PageSizes";
+import { type PageSize } from "@/constants/PageSizes";
 import { BackArrow } from "@/components/BackArrow";
 import { ImageSwiper } from "@/components/ImageSwiper";
 import { CustomButton } from "@/components/CustomButton";
@@ -26,15 +27,33 @@ export default function PreviewScreen() {
       });
     } catch (error) {
       console.error("Error sharing:", error);
-      alert("Failed to share. Please try again.");
+      Alert.alert("Failed to share. Please try again.");
     }
   };
 
   const handleSavePhotos = async () => {
     try {
-      // Implement saving logic
-      console.log(images);
-    } finally {
+      // Request permission to access media library
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission Required", "Please grant permission to save photos.");
+        return;
+      }
+
+      // Save each image to the photo gallery
+      const savedAssets = await Promise.all(
+        images.map(async (uri) => {
+          const asset = await MediaLibrary.createAssetAsync(uri);
+          return asset;
+        })
+      );
+
+      if (savedAssets.length > 0) {
+        Alert.alert("Success", "Images saved successfully!");
+      }
+    } catch (error) {
+      console.error("Error saving photos:", error);
+      Alert.alert("Error", "Failed to save photos. Please try again.");
     }
   };
 
@@ -44,7 +63,7 @@ export default function PreviewScreen() {
 
   return (
     <ImageBackground
-      source={require("../assets/images/background.jpeg")}
+      source={require("@/assets/images/background.jpeg")}
       style={styles.backgroundImage}
       resizeMode="cover">
       <SafeAreaView style={styles.container}>
@@ -54,13 +73,13 @@ export default function PreviewScreen() {
 
         <View style={styles.buttonContainer}>
           <CustomButton
-            text="Save as Photos"
+            text="Save Photos"
             onPress={handleSavePhotos}
             variant="outline"
             icon={<Ionicons name="images-outline" size={20} color={COLORS.primary} />}
           />
           <CustomButton
-            text="Share as PDF"
+            text="Share PDF"
             onPress={handleSharePDF}
             variant="outline"
             icon={<Ionicons name="document-outline" size={20} color={COLORS.primary} />}
