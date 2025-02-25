@@ -47,7 +47,7 @@ export default function SplitScreen() {
   const { handleScroll, handleZoom, isZoomedIn, currentScrollPosition } =
     useZoomAndScroll(scrollViewRef);
 
-  const { displayDimensions, splitLineDisplay, scaleFactor } = calculateImageMetrics({
+  const { displayDimensions, splitLineWidth, scaleFactor } = calculateImageMetrics({
     actualDimensions,
     containerDimensions,
     isZoomedIn,
@@ -108,8 +108,9 @@ export default function SplitScreen() {
                 {splitPositions.map((position, index) => (
                   <SplitLine
                     key={index}
+                    index={index + 1}
                     positionDisplay={position * scaleFactor}
-                    splitLineDisplay={splitLineDisplay}
+                    splitLineWidth={splitLineWidth}
                     onUpdatePosition={(pointerY) => updateSplit(index, pointerY)}
                     onRemoveSplit={() => removeSplit(index)}
                   />

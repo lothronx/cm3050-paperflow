@@ -1,6 +1,5 @@
 import type { ImageDimensions } from "@/types/ImageDimensions";
 import { calculateImageDisplay } from "@/utils/calculateImageDisplay";
-import { calculateSplitLineDisplay } from "@/utils/calculateSplitLineDisplay";
 
 interface calculateImageMetricsProps {
   actualDimensions: ImageDimensions;
@@ -19,13 +18,13 @@ export function calculateImageMetrics({
     isZoomedIn
   );
 
-  const splitLineDisplay = calculateSplitLineDisplay(displayDimensions, containerDimensions);
+  const splitLineWidth = Math.min(Math.max(displayDimensions.width, 88), containerDimensions.width);
 
   const scaleFactor = displayDimensions.height / actualDimensions.height;
 
   return {
     displayDimensions,
-    splitLineDisplay,
+    splitLineWidth,
     scaleFactor,
   };
 }

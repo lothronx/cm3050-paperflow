@@ -9,7 +9,7 @@ import { BackArrow } from "@/components/BackArrow";
 import { ImageSwiper } from "@/components/ImageSwiper";
 import { CustomButton } from "@/components/CustomButton";
 import { LoadingIndicator } from "@/components/LoadingIndicator";
-import generatePdfFromImages from "@/utils/generatePdfFromImages";
+import { generatePdfFromImages } from "@/utils/generatePdfFromImages";
 import { useMediaLibrary } from "@/hooks/useMediaLibrary";
 
 export default function PreviewScreen() {

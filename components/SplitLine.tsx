@@ -1,23 +1,23 @@
 import { useState } from "react";
 import { StyleSheet, View, Pressable } from "react-native";
+import { PanGestureHandler, PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { COLORS } from "@/constants/Colors";
-import { PanGestureHandler, PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
+import { Text } from "@/components/Text";
 
 interface SplitLineProps {
+  index: number;
   positionDisplay: number;
-  splitLineDisplay: {
-    width: number;
-    left: number;
-  };
+  splitLineWidth: number;
   onUpdatePosition: (moveY: number) => void;
   onRemoveSplit: () => void;
 }
 
 export const SplitLine = ({
+  index,
   positionDisplay,
-  splitLineDisplay,
+  splitLineWidth,
   onUpdatePosition,
   onRemoveSplit,
 }: SplitLineProps) => {
@@ -47,7 +47,8 @@ export const SplitLine = ({
         styles.container,
         {
           top: positionDisplay,
-          ...splitLineDisplay,
+          width: splitLineWidth,
+          transform: [{ translateX: -splitLineWidth / 2 }],
         },
       ]}>
       <Pressable
@@ -77,6 +78,9 @@ export const SplitLine = ({
           <MaterialIcons name="drag-indicator" size={16} color={COLORS.background} />
         </View>
       </PanGestureHandler>
+      <View style={[styles.iconContainer, styles.indexContainer]}>
+        <Text style={styles.index}>{index}</Text>
+      </View>
     </View>
   );
 };
@@ -85,6 +89,7 @@ const styles = StyleSheet.create({
   container: {
     position: "absolute",
     height: 1,
+    left: "50%",
     flexDirection: "row",
     zIndex: 1,
   },
@@ -138,5 +143,23 @@ const styles = StyleSheet.create({
   },
   dragHandleIconContainerActive: {
     backgroundColor: COLORS.primaryActive,
+  },
+  indexContainer: {
+    width: 36,
+    height: 16,
+    left: "50%",
+    transform: [{ translateY: -8 }, { translateX: -18 }],
+    backgroundColor: COLORS.background,
+  },
+  index: {
+    fontSize: 12,
+    fontWeight: "500",
+    color: COLORS.textSecondary,
+    textShadowColor: "rgba(0, 0, 0, 0.25)",
+    textShadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    textShadowRadius: 1,
   },
 });

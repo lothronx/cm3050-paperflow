@@ -3,7 +3,7 @@ import { manipulateAsync } from "expo-image-manipulator";
 import type { PageSize } from "@/types/PageSize";
 import { PageSizes } from "@/constants/PageSizes";
 
-const generatePdfFromImages = async (uris: string[], pageSize: PageSize) => {
+export const generatePdfFromImages = async (uris: string[], pageSize: PageSize) => {
   const images = await Promise.all(uris.map((uri) => manipulateAsync(uri, [], { base64: true })));
 
   const html = `
@@ -69,5 +69,3 @@ const generatePdfFromImages = async (uris: string[], pageSize: PageSize) => {
     },
   });
 };
-
-export default generatePdfFromImages;
