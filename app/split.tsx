@@ -66,7 +66,10 @@ export default function SplitScreen() {
       const positionOnImageDisplay = currentScrollPosition + visibleHeight / 2;
       const positionOnActualImage = positionOnImageDisplay / scaleFactor;
 
-      setSplitPositions([...splitPositions, Math.round(positionOnActualImage)]);
+      setSplitPositions([
+        ...splitPositions,
+        Math.min(Math.max(0, positionOnActualImage), actualDimensions.height),
+      ]);
     }
   };
 
@@ -78,9 +81,12 @@ export default function SplitScreen() {
     const newPositionOnImageDisplay = newPositionOnViewport + currentScrollPosition;
     const newPositionOnActualImage = newPositionOnImageDisplay / scaleFactor;
 
-    const newSplits = [...splitPositions];
-    newSplits[index] = Math.round(newPositionOnActualImage);
-    setSplitPositions(newSplits);
+    // Only update split if it's within the actual image bounds
+    if (newPositionOnActualImage >= 0 && newPositionOnActualImage <= actualDimensions.height) {
+      const newSplits = [...splitPositions];
+      newSplits[index] = Math.round(newPositionOnActualImage);
+      setSplitPositions(newSplits);
+    }
   };
 
   const handleRemoveSplit = (index: number) => {
@@ -140,7 +146,6 @@ export default function SplitScreen() {
             </ScrollView>
           </PinchGestureHandler>
         </View>
-
         <SplitActions onAddSplit={handleAddSplit} onRemoveAllSplits={handleRemoveAllSplits} />
       </SafeAreaView>
     </GestureHandlerRootView>

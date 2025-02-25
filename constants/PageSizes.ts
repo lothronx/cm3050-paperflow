@@ -1,7 +1,7 @@
 export const PageSizes = {
   A4: {
     id: "A4",
-    width: 595, //Postscript units, not cm
+    width: 595,
     height: 842,
   },
   Letter: {
