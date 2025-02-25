@@ -2,14 +2,14 @@ import { StyleSheet, View, Switch } from "react-native";
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
 import { InfoTooltip } from "@/components/InfoTooltip";
-interface OCROptionProps {
+interface AutoSplitOptionProps {
   title: string;
   tooltip?: string;
   defaultValue: boolean;
   onValueChange: (value: boolean) => void;
 }
 
-export const OCROption = ({ title, tooltip, defaultValue, onValueChange }: OCROptionProps) => {
+export const AutoSplitOption = ({ title, tooltip, defaultValue, onValueChange }: AutoSplitOptionProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>

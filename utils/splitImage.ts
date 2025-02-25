@@ -35,8 +35,8 @@ const cropImage = async (imageUri: string, cropConfig: CropConfig): Promise<stri
 
 export const splitImage = async (
   imageUri: string,
-  positions: number[],
-  actualDimensions: ImageDimensions
+  actualDimensions: ImageDimensions,
+  positions: number[]
 ): Promise<string[]> => {
   try {
     const sortedPositions = filterAndSortPositions(positions);

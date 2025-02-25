@@ -1,37 +1,37 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, SafeAreaView, ImageBackground, Alert } from "react-native";
+import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
 import { router } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import type { PageSize } from "@/types/PageSize";
 import { AnimatedTitle } from "@/components/AnimatedTitle";
 import { PageSizeOption } from "@/components/PageSizeOption";
-import { OCROption } from "@/components/OCROption";
+import { AutoSplitOption } from "@/components/AutoSplitOption";
 import { CustomButton } from "@/components/CustomButton";
 import { COLORS } from "@/constants/Colors";
-import { type PageSize } from "@/constants/PageSizes";
 
 const STORAGE_KEYS = {
   PAGE_SIZE: "@paperflow_page_size",
-  OCR: "@paperflow_ocr",
+  AUTO_SPLIT: "@paperflow_auto_split",
 } as const;
 
 export default function HomeScreen() {
-  const [ocr, setOcr] = useState(false);
+  const [autoSplit, setAutoSplit] = useState(true);
   const [pageSize, setPageSize] = useState<PageSize>("A4");
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const [savedPageSize, savedOcr] = await Promise.all([
+        const [savedPageSize, savedAutoSplit] = await Promise.all([
           AsyncStorage.getItem(STORAGE_KEYS.PAGE_SIZE),
-          AsyncStorage.getItem(STORAGE_KEYS.OCR),
+          AsyncStorage.getItem(STORAGE_KEYS.AUTO_SPLIT),
         ]);
 
         if (savedPageSize) {
           setPageSize(savedPageSize as PageSize);
         }
-        if (savedOcr !== null) {
-          setOcr(savedOcr === "true");
+        if (savedAutoSplit !== null) {
+          setAutoSplit(savedAutoSplit === "true");
         }
       } catch (error) {
         console.error("Error loading saved values:", error);
@@ -50,12 +50,12 @@ export default function HomeScreen() {
     }
   };
 
-  const handleOcrChange = async (value: boolean) => {
-    setOcr(value);
+  const handleAutoSplitChange = async (value: boolean) => {
+    setAutoSplit(value);
     try {
-      await AsyncStorage.setItem(STORAGE_KEYS.OCR, value.toString());
+      await AsyncStorage.setItem(STORAGE_KEYS.AUTO_SPLIT, value.toString());
     } catch (error) {
-      console.error("Error saving OCR setting:", error);
+      console.error("Error saving autoSplit setting:", error);
     }
   };
 
@@ -73,7 +73,7 @@ export default function HomeScreen() {
           imageHeight: result.assets[0].height,
           imageWidth: result.assets[0].width,
           pageSize: pageSize,
-          ocrString: ocr ? "true" : "false",
+          autoSplit: autoSplit ? "true" : "false",
         },
       });
     }
@@ -81,7 +81,7 @@ export default function HomeScreen() {
 
   return (
     <ImageBackground
-      source={require("../assets/images/background.jpeg")}
+      source={require("@/assets/images/background.jpeg")}
       style={styles.backgroundImage}
       resizeMode="cover">
       <SafeAreaView style={styles.container}>
@@ -91,15 +91,15 @@ export default function HomeScreen() {
           <View style={styles.settings}>
             <PageSizeOption
               title="Page Size"
-              tooltip="Choose the page size for splitting your image."
+              tooltip="Select the page size for splitting your image"
               defaultValue={pageSize}
               onValueChange={handlePageSizeChange}
             />
-            <OCROption
-              title="Prevent Text Truncation"
-              tooltip="Enable this to detect text using OCR (requires internet). This ensures your text stays complete during splitting."
-              defaultValue={ocr}
-              onValueChange={handleOcrChange}
+            <AutoSplitOption
+              title="Auto Split"
+              tooltip="Enable automatic image splitting according to the selected page size"
+              defaultValue={autoSplit}
+              onValueChange={handleAutoSplitChange}
             />
           </View>
 

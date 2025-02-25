@@ -5,7 +5,7 @@ import * as Sharing from "expo-sharing";
 import * as MediaLibrary from "expo-media-library";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
-import { type PageSize } from "@/constants/PageSizes";
+import type { PageSize } from "@/types/PageSize";
 import { BackArrow } from "@/components/BackArrow";
 import { ImageSwiper } from "@/components/ImageSwiper";
 import { CustomButton } from "@/components/CustomButton";

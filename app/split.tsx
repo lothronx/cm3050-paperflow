@@ -1,14 +1,15 @@
 import { useState, useRef, useEffect } from "react";
-import { StyleSheet, View, Image, Alert, type LayoutChangeEvent } from "react-native";
+import { StyleSheet, View, Image, type LayoutChangeEvent } from "react-native";
 import {
   ScrollView,
   PinchGestureHandler,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import { useLocalSearchParams, router } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { COLORS } from "@/constants/Colors";
-import { PageSizes, type PageSize } from "@/constants/PageSizes";
+import { PageSizes } from "@/constants/PageSizes";
+import type { PageSize } from "@/types/PageSize";
 import type { ImageDimensions } from "@/types/ImageDimensions";
 import { BackArrow } from "@/components/BackArrow";
 import { CheckArrow } from "@/components/CheckArrow";
@@ -17,8 +18,9 @@ import { SplitActions } from "@/components/SplitActions";
 import { SplitLine } from "@/components/SplitLine";
 import { LoadingIndicator } from "@/components/LoadingIndicator";
 import { useZoomAndScroll } from "@/hooks/useZoomAndScroll";
-import { useImageCalculations } from "@/hooks/useImageCalculation";
-import { splitImage } from "@/utils/splitImage";
+import { useSplitManagement } from "@/hooks/useSplitManagement";
+import { useImageProcessing } from "@/hooks/useImageProcessing";
+import { useImageCalculations } from "@/hooks/useImageCalculations";
 
 export default function SplitScreen() {
   const params = useLocalSearchParams<{
@@ -26,28 +28,21 @@ export default function SplitScreen() {
     imageHeight: string;
     imageWidth: string;
     pageSize: PageSize;
-    ocrString: string;
+    autoSplit: string;
   }>();
 
   const scrollViewRef = useRef<ScrollView>(null);
-
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const [splitPositions, setSplitPositions] = useState<number[]>([]);
-
-  const actualDimensions: ImageDimensions = {
-    width: Number(params.imageWidth),
-    height: Number(params.imageHeight),
-  };
-
-  const pageDimensions: ImageDimensions = PageSizes[params.pageSize];
+  const topSpacing = useSafeAreaInsets().top;
 
   const [containerDimensions, setContainerDimensions] = useState<ImageDimensions>({
     width: 0,
     height: 0,
   });
 
-  const topSpacing = useSafeAreaInsets().top;
+  const actualDimensions: ImageDimensions = {
+    width: Number(params.imageWidth),
+    height: Number(params.imageHeight),
+  };
 
   const { handleScroll, handleZoom, isZoomedIn, currentScrollPosition } =
     useZoomAndScroll(scrollViewRef);
@@ -58,84 +53,32 @@ export default function SplitScreen() {
     isZoomedIn,
   });
 
+  const { splitPositions, addSplit, updateSplit, removeSplit, removeAllSplits, autoSplit } =
+    useSplitManagement({
+      actualDimensions,
+      pageDimensions: PageSizes[params.pageSize],
+      containerDimensions,
+      topSpacing,
+      currentScrollPosition,
+      scaleFactor,
+    });
+
+  const { isProcessing, handlePreview } = useImageProcessing({
+    imageUri: params.imageUri,
+    splitPositions,
+    actualDimensions,
+    pageSize: params.pageSize,
+  });
+
+  useEffect(() => {
+    if (params.autoSplit == "true") {
+      autoSplit();
+    }
+  }, [params.imageUri, params.pageSize, params.autoSplit]);
+
   const handleLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
     setContainerDimensions({ width, height });
-  };
-
-  useEffect(() => {
-    if (params.pageSize == "Manual") return;
-
-    const imageAspectRatio = actualDimensions.height / actualDimensions.width;
-    const pageAspectRatio = pageDimensions.height / pageDimensions.width;
-    const numSplits = Math.floor(imageAspectRatio / pageAspectRatio);
-
-    if (numSplits > 0) {
-      const newSplitPositions = [];
-      for (let i = 1; i <= numSplits; i++) {
-        const position = i * actualDimensions.width * pageAspectRatio;
-        newSplitPositions.push(position);
-      }
-      setSplitPositions(newSplitPositions);
-    }
-  }, [params.imageUri, params.pageSize, params.ocrString]);
-
-  const handleAddSplit = () => {
-    if (scrollViewRef.current) {
-      const visibleHeight = containerDimensions.height;
-      const positionOnImageDisplay = currentScrollPosition + visibleHeight / 2;
-      const positionOnActualImage = positionOnImageDisplay / scaleFactor;
-
-      setSplitPositions([
-        ...splitPositions,
-        Math.min(Math.max(0, positionOnActualImage), actualDimensions.height),
-      ]);
-    }
-  };
-
-  const handleUpdateSplit = (index: number, pointerY: number) => {
-    const newPositionOnViewport = Math.min(
-      containerDimensions.height,
-      Math.max(0, pointerY - topSpacing)
-    );
-    const newPositionOnImageDisplay = newPositionOnViewport + currentScrollPosition;
-    const newPositionOnActualImage = newPositionOnImageDisplay / scaleFactor;
-
-    // Only update split if it's within the actual image bounds
-    if (newPositionOnActualImage >= 0 && newPositionOnActualImage <= actualDimensions.height) {
-      const newSplits = [...splitPositions];
-      newSplits[index] = Math.round(newPositionOnActualImage);
-      setSplitPositions(newSplits);
-    }
-  };
-
-  const handleRemoveSplit = (index: number) => {
-    const newSplits = splitPositions.filter((_, i) => i !== index);
-    setSplitPositions(newSplits);
-  };
-
-  const handleRemoveAllSplits = () => {
-    setSplitPositions([]);
-  };
-
-  const handlePreview = async () => {
-    try {
-      setIsProcessing(true);
-
-      const result = await splitImage(params.imageUri, splitPositions, actualDimensions);
-
-      router.push({
-        pathname: "/preview",
-        params: {
-          images: JSON.stringify(result),
-          pageSize: params.pageSize,
-        },
-      });
-    } catch (error) {
-      Alert.alert("Error", "Failed to split images. Please try again.");
-    } finally {
-      setIsProcessing(false);
-    }
   };
 
   return (
@@ -167,15 +110,15 @@ export default function SplitScreen() {
                     key={index}
                     positionDisplay={position * scaleFactor}
                     splitLineDisplay={splitLineDisplay}
-                    onUpdatePosition={(pointerY) => handleUpdateSplit(index, pointerY)}
-                    onRemoveSplit={() => handleRemoveSplit(index)}
+                    onUpdatePosition={(pointerY) => updateSplit(index, pointerY)}
+                    onRemoveSplit={() => removeSplit(index)}
                   />
                 ))}
               </ScrollView>
             </PinchGestureHandler>
           </View>
 
-          <SplitActions onAddSplit={handleAddSplit} onRemoveAllSplits={handleRemoveAllSplits} />
+          <SplitActions onAddSplit={addSplit} onRemoveAllSplits={removeAllSplits} />
         </View>
       </SafeAreaView>
     </GestureHandlerRootView>
@@ -190,6 +133,8 @@ const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     backgroundColor: COLORS.backgroundSecondary,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.border,
   },
   scrollContainer: {
     width: "100%",

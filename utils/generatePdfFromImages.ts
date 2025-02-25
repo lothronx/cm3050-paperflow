@@ -1,6 +1,7 @@
 import * as Print from "expo-print";
 import { manipulateAsync } from "expo-image-manipulator";
-import { type PageSize, PageSizes } from "@/constants/PageSizes";
+import type { PageSize } from "@/types/PageSize";
+import { PageSizes } from "@/constants/PageSizes";
 
 const generatePdfFromImages = async (uris: string[], pageSize: PageSize) => {
   const images = await Promise.all(uris.map((uri) => manipulateAsync(uri, [], { base64: true })));
