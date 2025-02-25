@@ -12,6 +12,7 @@ interface SplitLineProps {
   splitLineWidth: number;
   onUpdatePosition: (moveY: number) => void;
   onRemoveSplit: () => void;
+  onDragEnd: () => void;
 }
 
 export const SplitLine = ({
@@ -20,6 +21,7 @@ export const SplitLine = ({
   splitLineWidth,
   onUpdatePosition,
   onRemoveSplit,
+  onDragEnd,
 }: SplitLineProps) => {
   const [isDragging, setIsDragging] = useState(false);
 
@@ -34,6 +36,7 @@ export const SplitLine = ({
 
   const handleGestureEnd = () => {
     setIsDragging(false);
+    onDragEnd();
   };
 
   const handleRemoveSplit = () => {

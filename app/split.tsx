@@ -53,7 +53,7 @@ export default function SplitScreen() {
     isZoomedIn,
   });
 
-  const { splitPositions, addSplit, updateSplit, removeSplit, removeAllSplits, autoSplit } =
+  const { splitPositions, addSplit, updateSplit, removeSplit, removeAllSplits, autoSplit, handleDragEnd } =
     useSplitManagement({
       actualDimensions,
       pageDimensions: PageSizes[params.pageSize],
@@ -113,6 +113,7 @@ export default function SplitScreen() {
                     splitLineWidth={splitLineWidth}
                     onUpdatePosition={(pointerY) => updateSplit(index, pointerY)}
                     onRemoveSplit={() => removeSplit(index)}
+                    onDragEnd={handleDragEnd}
                   />
                 ))}
               </ScrollView>

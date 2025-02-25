@@ -20,15 +20,22 @@ export function useSplitManagement({
 }: SplitManagementProps) {
   const [splitPositions, setSplitPositions] = useState<number[]>([]);
 
+  const sortPositions = (positions: number[]) => {
+    return [...positions].sort((a, b) => a - b);
+  };
+
+  const clampPosition = (position: number) => {
+    return Math.min(Math.max(0, position), actualDimensions.height);
+  };
+
   const addSplit = () => {
     const visibleHeight = containerDimensions.height;
     const positionOnImageDisplay = currentScrollPosition + visibleHeight / 2;
     const positionOnActualImage = positionOnImageDisplay / scaleFactor;
 
-    setSplitPositions([
-      ...splitPositions,
-      Math.min(Math.max(0, positionOnActualImage), actualDimensions.height),
-    ]);
+    setSplitPositions((prevPositions) =>
+      sortPositions([...prevPositions, clampPosition(positionOnActualImage)])
+    );
   };
 
   const updateSplit = (index: number, pointerY: number) => {
@@ -47,8 +54,14 @@ export function useSplitManagement({
     setSplitPositions(newSplitPositions);
   };
 
+  const handleDragEnd = () => {
+    setSplitPositions((positions) => sortPositions([...positions]));
+  };
+
   const removeSplit = (index: number) => {
-    setSplitPositions(splitPositions.filter((_, i) => i !== index));
+    setSplitPositions((prevPositions) =>
+      sortPositions(prevPositions.filter((_, i) => i !== index))
+    );
   };
 
   const removeAllSplits = () => {
@@ -76,5 +89,6 @@ export function useSplitManagement({
     removeSplit,
     removeAllSplits,
     autoSplit,
+    handleDragEnd,
   };
 }
