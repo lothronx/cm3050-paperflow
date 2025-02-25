@@ -2,61 +2,35 @@ import { useState, useEffect } from "react";
 import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
 import { router } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { PageSize } from "@/types/PageSize";
+import { COLORS } from "@/constants/Colors";
 import { AnimatedTitle } from "@/components/AnimatedTitle";
 import { PageSizeOption } from "@/components/PageSizeOption";
 import { AutoSplitOption } from "@/components/AutoSplitOption";
 import { CustomButton } from "@/components/CustomButton";
-import { COLORS } from "@/constants/Colors";
-
-const STORAGE_KEYS = {
-  PAGE_SIZE: "@paperflow_page_size",
-  AUTO_SPLIT: "@paperflow_auto_split",
-} as const;
+import { StorageService } from "@/services/storage";
 
 export default function HomeScreen() {
   const [autoSplit, setAutoSplit] = useState(true);
   const [pageSize, setPageSize] = useState<PageSize>("A4");
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const [savedPageSize, savedAutoSplit] = await Promise.all([
-          AsyncStorage.getItem(STORAGE_KEYS.PAGE_SIZE),
-          AsyncStorage.getItem(STORAGE_KEYS.AUTO_SPLIT),
-        ]);
-
-        if (savedPageSize) {
-          setPageSize(savedPageSize as PageSize);
-        }
-        if (savedAutoSplit !== null) {
-          setAutoSplit(savedAutoSplit === "true");
-        }
-      } catch (error) {
-        console.error("Error loading saved values:", error);
-      }
+    const loadSettings = async () => {
+      const settings = await StorageService.getSettings();
+      if (settings.pageSize) setPageSize(settings.pageSize);
+      if (settings.autoSplit !== null) setAutoSplit(settings.autoSplit);
     };
-
-    getData();
+    loadSettings();
   }, []);
 
   const handlePageSizeChange = async (selectedSize: PageSize) => {
     setPageSize(selectedSize);
-    try {
-      await AsyncStorage.setItem(STORAGE_KEYS.PAGE_SIZE, selectedSize);
-    } catch (error) {
-      console.error("Error saving page size:", error);
-    }
+    await StorageService.savePageSize(selectedSize);
   };
 
   const handleAutoSplitChange = async (value: boolean) => {
     setAutoSplit(value);
-    try {
-      await AsyncStorage.setItem(STORAGE_KEYS.AUTO_SPLIT, value.toString());
-    } catch (error) {
-      console.error("Error saving autoSplit setting:", error);
-    }
+    await StorageService.saveAutoSplit(value);
   };
 
   const handleSelectImage = async () => {

@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { StyleSheet, View, SafeAreaView, ImageBackground, Alert, Platform } from "react-native";
+import { StyleSheet, View, SafeAreaView, ImageBackground, Alert } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
-import * as MediaLibrary from "expo-media-library";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
 import type { PageSize } from "@/types/PageSize";
@@ -11,6 +10,7 @@ import { ImageSwiper } from "@/components/ImageSwiper";
 import { CustomButton } from "@/components/CustomButton";
 import { LoadingIndicator } from "@/components/LoadingIndicator";
 import generatePdfFromImages from "@/utils/generatePdfFromImages";
+import { useMediaLibrary } from "@/hooks/useMediaLibrary";
 
 export default function PreviewScreen() {
   const params = useLocalSearchParams<{ images: string; pageSize: PageSize }>();
@@ -18,7 +18,8 @@ export default function PreviewScreen() {
   // Parse the stringified array of image URIs
   const images: string[] = params.images ? JSON.parse(params.images) : [];
 
-  const [status, requestPermission] = MediaLibrary.usePermissions();
+  const { saveToLibrary } = useMediaLibrary();
+
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSharePDF = async () => {
@@ -41,33 +42,10 @@ export default function PreviewScreen() {
 
   const handleSavePhotos = async () => {
     try {
-      // On iOS 11+, it's possible to use saveToLibraryAsync without asking for CAMERA_ROLL permission
-      // Thus, only check for permissions on Android
-      if (Platform.OS === "android") {
-        if (!status?.granted) {
-          const permission = await requestPermission();
-          if (!permission.granted) {
-            Alert.alert(
-              "Permission Required",
-              "Please go to Settings and grant PaperFlow access to your gallery."
-            );
-            return;
-          }
-        }
-      }
-
-      await Promise.all(
-        images.map(async (uri) => {
-          await MediaLibrary.saveToLibraryAsync(uri);
-        })
-      );
-
+      await saveToLibrary(images);
       Alert.alert("Success", "Images saved successfully!");
     } catch (error) {
-      Alert.alert(
-        "Permission Required",
-        "Please go to Settings and grant PaperFlow access to your Photos."
-      );
+      Alert.alert("Permission Required", "Please grant access to save photos");
     }
   };
 

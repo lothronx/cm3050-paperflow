@@ -20,7 +20,7 @@ import { LoadingIndicator } from "@/components/LoadingIndicator";
 import { useZoomAndScroll } from "@/hooks/useZoomAndScroll";
 import { useSplitManagement } from "@/hooks/useSplitManagement";
 import { useImageProcessing } from "@/hooks/useImageProcessing";
-import { useImageCalculations } from "@/hooks/useImageCalculations";
+import { calculateImageMetrics } from "@/utils/calculateImageMetrics";
 
 export default function SplitScreen() {
   const params = useLocalSearchParams<{
@@ -47,7 +47,7 @@ export default function SplitScreen() {
   const { handleScroll, handleZoom, isZoomedIn, currentScrollPosition } =
     useZoomAndScroll(scrollViewRef);
 
-  const { displayDimensions, splitLineDisplay, scaleFactor } = useImageCalculations({
+  const { displayDimensions, splitLineDisplay, scaleFactor } = calculateImageMetrics({
     actualDimensions,
     containerDimensions,
     isZoomedIn,

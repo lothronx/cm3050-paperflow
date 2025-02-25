@@ -2,17 +2,17 @@ import type { ImageDimensions } from "@/types/ImageDimensions";
 import { calculateImageDisplay } from "@/utils/calculateImageDisplay";
 import { calculateSplitLineDisplay } from "@/utils/calculateSplitLineDisplay";
 
-interface useImageCalculationsProps {
+interface calculateImageMetricsProps {
   actualDimensions: ImageDimensions;
   containerDimensions: ImageDimensions;
   isZoomedIn: boolean;
 }
 
-export function useImageCalculations({
+export function calculateImageMetrics({
   actualDimensions,
   containerDimensions,
   isZoomedIn,
-}: useImageCalculationsProps) {
+}: calculateImageMetricsProps) {
   const displayDimensions = calculateImageDisplay(
     actualDimensions,
     containerDimensions,
