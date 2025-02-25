@@ -2,8 +2,8 @@ export type ImageDimensions = {
   width: number;
   height: number;
 };
-// Custom hook for managing image dimensions
-export const useImageDimensions = (
+
+const calculateDisplayDimensions = (
   actualDimensions: ImageDimensions,
   containerDimensions: ImageDimensions,
   isZoomedIn: boolean
@@ -15,7 +15,7 @@ export const useImageDimensions = (
     height: isZoomedIn ? containerDimensions.width * imageAspectRatio : containerDimensions.height,
   };
 
-  const scaleFactor = displayDimensions.height / actualDimensions.height;
-
-  return { displayDimensions, scaleFactor };
+  return displayDimensions;
 };
+
+export default calculateDisplayDimensions;

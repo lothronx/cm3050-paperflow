@@ -1,7 +1,6 @@
-import type { ImageDimensions } from "@/hooks/useImageDimensions";
+import type { ImageDimensions } from "@/utils/calculateDisplayDimensions";
 
-// Custom hook for managing split line horizontal position
-export const useSplitLineHorizontalPos = (
+const calculateSplitLineWidth = (
   displayDimensions: ImageDimensions,
   containerDimensions: ImageDimensions
 ) => {
@@ -11,3 +10,5 @@ export const useSplitLineHorizontalPos = (
 
   return { width, left };
 };
+
+export default calculateSplitLineWidth;

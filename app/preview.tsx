@@ -1,4 +1,4 @@
-import { StyleSheet, View, SafeAreaView, ImageBackground, Alert } from "react-native";
+import { StyleSheet, View, SafeAreaView, ImageBackground, Alert, Platform } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
 import * as MediaLibrary from "expo-media-library";
@@ -16,6 +16,8 @@ export default function PreviewScreen() {
   // Parse the stringified array of image URIs
   const images: string[] = params.images ? JSON.parse(params.images) : [];
 
+  const [status, requestPermission] = MediaLibrary.usePermissions();
+
   const handleSharePDF = async () => {
     try {
       const result = await generatePdfFromImages(images, params.pageSize);
@@ -26,34 +28,39 @@ export default function PreviewScreen() {
         UTI: "com.adobe.pdf",
       });
     } catch (error) {
-      console.error("Error sharing:", error);
       Alert.alert("Failed to share. Please try again.");
     }
   };
 
   const handleSavePhotos = async () => {
     try {
-      // Request permission to access media library
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert("Permission Required", "Please grant permission to save photos.");
-        return;
+      // On iOS 11+, it's possible to use saveToLibraryAsync without asking for CAMERA_ROLL permission
+      // Thus, only check for permissions on Android
+      if (Platform.OS === "android") {
+        if (!status?.granted) {
+          const permission = await requestPermission();
+          if (!permission.granted) {
+            Alert.alert(
+              "Permission Required",
+              "Please go to Settings and grant PaperFlow access to your gallery."
+            );
+            return;
+          }
+        }
       }
 
-      // Save each image to the photo gallery
-      const savedAssets = await Promise.all(
+      await Promise.all(
         images.map(async (uri) => {
-          const asset = await MediaLibrary.createAssetAsync(uri);
-          return asset;
+          await MediaLibrary.saveToLibraryAsync(uri);
         })
       );
 
-      if (savedAssets.length > 0) {
-        Alert.alert("Success", "Images saved successfully!");
-      }
+      Alert.alert("Success", "Images saved successfully!");
     } catch (error) {
-      console.error("Error saving photos:", error);
-      Alert.alert("Error", "Failed to save photos. Please try again.");
+      Alert.alert(
+        "Permission Required",
+        "Please go to Settings and grant PaperFlow access to your Photos."
+      );
     }
   };
 

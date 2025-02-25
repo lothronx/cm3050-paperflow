@@ -1,23 +1,25 @@
 import { useState, useRef } from "react";
-import { StyleSheet, View, Image, type LayoutChangeEvent } from "react-native";
-import { useLocalSearchParams, router } from "expo-router";
+import { StyleSheet, View, Image, Alert, type LayoutChangeEvent } from "react-native";
 import {
   ScrollView,
   PinchGestureHandler,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useLocalSearchParams, router } from "expo-router";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import { COLORS } from "@/constants/Colors";
+import { PageSizes, type PageSize } from "@/constants/PageSizes";
 import { BackArrow } from "@/components/BackArrow";
 import { CheckArrow } from "@/components/CheckArrow";
 import { ZoomControl } from "@/components/ZoomControl";
 import { SplitActions } from "@/components/SplitActions";
 import { SplitLine } from "@/components/SplitLine";
-import { PageSizes, type PageSize } from "@/constants/PageSizes";
-import { type ImageDimensions, useImageDimensions } from "@/hooks/useImageDimensions";
-import { useSplitLineHorizontalPos } from "@/hooks/useSplitLineHorizontalPos";
 import { useZoomAndScroll } from "@/hooks/useZoomAndScroll";
-import * as ImageManipulator from "expo-image-manipulator";
+import calculateDisplayDimensions, {
+  type ImageDimensions,
+} from "@/utils/calculateDisplayDimensions";
+import calculateSplitLineWidth from "@/utils/calculateSplitLineWidth";
 
 export default function SplitScreen() {
   const params = useLocalSearchParams<{
@@ -43,15 +45,18 @@ export default function SplitScreen() {
 
   const { isZoomedIn, getCurrentScrollPosition, handleScroll, handleZoom } =
     useZoomAndScroll(scrollViewRef);
-  const { displayDimensions, scaleFactor } = useImageDimensions(
+    
+  const displayDimensions = calculateDisplayDimensions(
     actualDimensions,
     containerDimensions,
     isZoomedIn
   );
-  const { width: splitLineWidth, left: splitLineLeft } = useSplitLineHorizontalPos(
+  const { width: splitLineWidth, left: splitLineLeft } = calculateSplitLineWidth(
     displayDimensions,
     containerDimensions
   );
+
+  const scaleFactor = displayDimensions.height / actualDimensions.height;
 
   const handleLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
@@ -87,13 +92,20 @@ export default function SplitScreen() {
     setSplitPositions([]);
   };
 
-  const splitImage = async (imageUri: string, height: number, positions: number[]) => {
-    const sortedPositions = [...positions].sort((a, b) => a - b);
+  const splitImage = async (imageUri: string, positions: number[]) => {
+    const sortedPositions = [...positions]
+      .sort((a, b) => a - b)
+      .reduce((acc: number[], curr: number) => {
+        if (acc.length === 0 || curr - acc[acc.length - 1] >= 10) {
+          acc.push(curr);
+        }
+        return acc;
+      }, []);
     const images: string[] = [];
 
     let startY = 0;
     for (const position of sortedPositions) {
-      const result = await ImageManipulator.manipulateAsync(
+      const result = await manipulateAsync(
         imageUri,
         [
           {
@@ -105,7 +117,7 @@ export default function SplitScreen() {
             },
           },
         ],
-        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+        { compress: 1, format: SaveFormat.JPEG }
       );
       images.push(result.uri);
       startY = position;
@@ -113,7 +125,7 @@ export default function SplitScreen() {
 
     // Handle the last segment
     if (startY < actualDimensions.height) {
-      const result = await ImageManipulator.manipulateAsync(
+      const result = await manipulateAsync(
         imageUri,
         [
           {
@@ -125,7 +137,7 @@ export default function SplitScreen() {
             },
           },
         ],
-        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+        { compress: 1, format: SaveFormat.JPEG }
       );
       images.push(result.uri);
     }
@@ -135,12 +147,8 @@ export default function SplitScreen() {
 
   const handlePreview = async () => {
     try {
-      setIsProcessing(true);
-      const splitImages = await splitImage(
-        params.imageUri,
-        actualDimensions.height,
-        splitPositions
-      );
+      const splitImages = await splitImage(params.imageUri, splitPositions);
+
       router.push({
         pathname: "/preview",
         params: {
@@ -149,10 +157,7 @@ export default function SplitScreen() {
         },
       });
     } catch (error) {
-      console.error("Error splitting images:", error);
-      // You might want to show an error message to the user here
-    } finally {
-      setIsProcessing(false);
+      Alert.alert("Error", "Failed to split images. Please try again.");
     }
   };
 
