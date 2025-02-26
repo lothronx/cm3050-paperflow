@@ -1,4 +1,5 @@
 import type { ImageDimensions } from "@/types/ImageDimensions";
+import { PixelRatio } from "react-native";
 
 export const calculateImageDisplay = (
   actualDimensions: ImageDimensions,
@@ -6,18 +7,20 @@ export const calculateImageDisplay = (
   isZoomedIn: boolean
 ) => {
   const imageAspectRatio = actualDimensions.height / actualDimensions.width;
+  const scale = PixelRatio.get();
 
-  const width = isZoomedIn
-    ? containerDimensions.width
-    : containerDimensions.height / imageAspectRatio;
+  // Scale dimensions up for high DPI displays
+  const scaledContainerWidth = containerDimensions.width * scale;
+  const scaledContainerHeight = containerDimensions.height * scale;
 
-  const height = isZoomedIn
-    ? containerDimensions.width * imageAspectRatio
-    : containerDimensions.height;
+  const width = isZoomedIn ? scaledContainerWidth : scaledContainerHeight / imageAspectRatio;
 
+  const height = isZoomedIn ? scaledContainerWidth * imageAspectRatio : scaledContainerHeight;
+
+  // Scale back down for display
   const displayDimensions = {
-    width,
-    height,
+    width: width / scale,
+    height: height / scale,
   };
 
   return displayDimensions;

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { StyleSheet, View, Image, type LayoutChangeEvent } from "react-native";
+import { StyleSheet, View, type LayoutChangeEvent } from "react-native";
+import { Image } from "expo-image";
 import {
   ScrollView,
   PinchGestureHandler,
@@ -109,8 +110,12 @@ export default function SplitScreen() {
                 showsVerticalScrollIndicator={isZoomedIn}>
                 <Image
                   source={{ uri: params.imageUri }}
-                  style={displayDimensions}
-                  resizeMode="cover"
+                  style={{
+                    width: displayDimensions.width,
+                    height: displayDimensions.height,
+                  }}
+                  contentFit="contain"
+                  cachePolicy="memory-disk"
                 />
                 {splitPositions.map((position, index) => (
                   <SplitLine
