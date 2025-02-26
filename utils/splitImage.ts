@@ -8,9 +8,9 @@ interface CropConfig {
   height: number;
 }
 
-const filterAndSortPositions = (positions: number[]): number[] => {
+const filterPositions = (positions: number[], actualDimensions: ImageDimensions): number[] => {
   return [...positions]
-    .sort((a, b) => a - b)
+    .filter((pos) => pos !== 0 && pos !== actualDimensions.height)
     .reduce((acc: number[], curr: number) => {
       if (acc.length === 0 || curr - acc[acc.length - 1] >= 10) {
         acc.push(curr);
@@ -39,11 +39,11 @@ export const splitImage = async (
   positions: number[]
 ): Promise<string[]> => {
   try {
-    const sortedPositions = filterAndSortPositions(positions);
+    const filteredPositions = filterPositions(positions, actualDimensions);
     const images: string[] = [];
 
     let startY = 0;
-    for (const position of sortedPositions) {
+    for (const position of filteredPositions) {
       const cropConfig: CropConfig = {
         originX: 0,
         originY: startY,

@@ -20,7 +20,7 @@ This project proposes a targeted solution to effectively address the long image 
 
 ### 1.2 Project Overview
 
-PaperFlow redefines how you prepare long images for printing. This app’s main feature is splitting text-based long pictures into A4, Letter, or Legal-sized pages without cutting off any text, all made possible by advanced OCR technology. Ideal for lawyers preparing documentary evidence or anyone handling scrolling screenshot, PaperFlow lets you import images, fine-tune split lines manually, and export print-ready pages with ease.
+Discover **PaperFlow**, the handy app that simplifies preparing long images for print. Perfect for lawyers and anyone dealing with scrolling screenshots, PaperFlow allows you to easily import images and automatically split them into A4, Letter, or Legal-sized pages. Fine-tune split lines manually and export your documents in print-ready format with just a few clicks. Experience hassle-free printing like never before!
 
 ### 1.3 Core Features
 
