@@ -9,10 +9,11 @@ import { AnimatedTitle } from "@/components/AnimatedTitle";
 import { PageSizeOption } from "@/components/PageSizeOption";
 import { AutoSplitOption } from "@/components/AutoSplitOption";
 import { CustomButton } from "@/components/CustomButton";
+import { LanguageOption } from "@/components/LanguageOption";
 import { StorageService } from "@/services/storage";
 
 export default function HomeScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [autoSplit, setAutoSplit] = useState(true);
   const [pageSize, setPageSize] = useState<PageSize>("A4");
@@ -34,6 +35,10 @@ export default function HomeScreen() {
   const handleAutoSplitChange = async (value: boolean) => {
     setAutoSplit(value);
     await StorageService.saveAutoSplit(value);
+  };
+
+  const handleLanguageChange = async () => {
+    i18n.changeLanguage(i18n.language === "en" ? "zh" : "en");
   };
 
   const handleSelectImage = async () => {
@@ -61,6 +66,7 @@ export default function HomeScreen() {
       source={require("@/assets/images/background.jpeg")}
       style={styles.backgroundImage}
       resizeMode="cover">
+      <LanguageOption isEnglish={i18n.language === "en"} onToggle={handleLanguageChange} />
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           <AnimatedTitle />
