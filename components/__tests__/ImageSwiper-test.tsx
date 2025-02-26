@@ -21,10 +21,8 @@ describe("ImageSwiper", () => {
   it("should render correctly with provided images", () => {
     const { getByTestId, UNSAFE_getAllByType } = render(<ImageSwiper images={mockImages} />);
 
-    // Check if Swiper component is rendered
     expect(getByTestId("mock-swiper")).toBeTruthy();
 
-    // Check if all images are rendered
     const images = UNSAFE_getAllByType(Image);
     expect(images).toHaveLength(mockImages.length);
   });

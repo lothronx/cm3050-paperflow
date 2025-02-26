@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: COLORS.background,
     fontSize: 18,
-    fontWeight: "500",
+    fontFamily: "Montserrat_500Medium",
     textShadowColor: "rgba(0, 0, 0, 0.25)",
     textShadowOffset: {
       width: 0,

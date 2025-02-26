@@ -3,7 +3,7 @@ import type { TextProps } from "react-native";
 
 const defaultStyles = StyleSheet.create({
   text: {
-    fontFamily: "Montserrat",
+    fontFamily: "Montserrat_400Regular",
     fontSize: 16,
   },
 });

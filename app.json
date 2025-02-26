@@ -24,6 +24,11 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+    "fonts": [
+      "./assets/fonts/PlayfairDisplay-BlackItalic.ttf",
+      "./assets/fonts/PangMenZhengDao.ttf",
+      "./assets/fonts/Montserrat.ttf"
+    ],
     "plugins": [
       "expo-router",
       [
@@ -39,6 +44,20 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "da844d1c-1f83-48ba-8b32-505fa7ec533f"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/da844d1c-1f83-48ba-8b32-505fa7ec533f"
     }
   }
 }

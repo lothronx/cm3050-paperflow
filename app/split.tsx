@@ -53,15 +53,22 @@ export default function SplitScreen() {
     isZoomedIn,
   });
 
-  const { splitPositions, addSplit, updateSplit, removeSplit, removeAllSplits, autoSplit, handleDragEnd } =
-    useSplitManagement({
-      actualDimensions,
-      pageDimensions: PageSizes[params.pageSize],
-      containerDimensions,
-      topSpacing,
-      currentScrollPosition,
-      scaleFactor,
-    });
+  const {
+    splitPositions,
+    addSplit,
+    updateSplit,
+    removeSplit,
+    removeAllSplits,
+    autoSplit,
+    handleDragEnd,
+  } = useSplitManagement({
+    actualDimensions,
+    pageDimensions: PageSizes[params.pageSize],
+    containerDimensions,
+    topSpacing,
+    currentScrollPosition,
+    scaleFactor,
+  });
 
   const { isProcessing, handlePreview } = useImageProcessing({
     imageUri: params.imageUri,

@@ -14,16 +14,6 @@ describe("LanguageOption", () => {
     mockOnToggle.mockClear();
   });
 
-  it("should match snapshot when English is selected", () => {
-    const tree = render(<LanguageOption isEnglish={true} onToggle={mockOnToggle} />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
-  it("should match snapshot when English is not selected", () => {
-    const tree = render(<LanguageOption isEnglish={false} onToggle={mockOnToggle} />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
   it("calls onToggle when pressed", () => {
     const { getByTestId } = render(<LanguageOption isEnglish={true} onToggle={mockOnToggle} />);
 

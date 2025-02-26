@@ -35,7 +35,7 @@ export const PageSizeOption = ({
           <Text style={styles.title}>{title}</Text>
           {tooltip && <InfoTooltip content={tooltip} />}
         </View>
-        <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+        <TouchableOpacity onPress={() => setIsModalVisible(true)} testID="page-size-button">
           <View style={styles.rightContent}>
             {defaultValue && <Text style={styles.value}>{defaultValue}</Text>}
             <Ionicons name="chevron-forward" size={20} color={COLORS.textSecondary} />

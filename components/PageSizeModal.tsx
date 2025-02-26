@@ -24,12 +24,16 @@ export const PageSizeModal = ({
 
   return (
     <Modal visible={isVisible} transparent animationType="slide" onRequestClose={onClose}>
-      <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={onClose}>
+      <TouchableOpacity
+        style={styles.modalOverlay}
+        activeOpacity={1}
+        onPress={onClose}
+        testID="modal-overlay">
         <SafeAreaView style={styles.modalContent}>
           <TouchableOpacity activeOpacity={1}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{t("modal.title")}</Text>
-              <TouchableOpacity onPress={onClose}>
+              <TouchableOpacity onPress={onClose} testID="close-button">
                 <Ionicons name="close" size={24} color={COLORS.text} />
               </TouchableOpacity>
             </View>
@@ -74,7 +78,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontFamily: "Montserrat_600SemiBold",
     color: COLORS.text,
   },
   optionItem: {

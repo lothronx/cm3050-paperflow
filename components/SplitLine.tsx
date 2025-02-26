@@ -54,6 +54,7 @@ export const SplitLine = ({
       minDist={0}
       activeOffsetY={[-5, 5]}>
       <View
+        testID="split-line-container"
         style={[
           styles.container,
           {
@@ -63,13 +64,14 @@ export const SplitLine = ({
           },
         ]}>
         <Pressable
+          testID="delete-button"
           onPress={handleRemoveSplit}
           style={({ pressed }) => [
             styles.iconContainer,
             styles.deleteIconContainer,
             pressed && styles.deleteIconContainerActive,
           ]}>
-          <MaterialIcons name="delete" size={16} color={COLORS.background} />
+          <MaterialIcons testID="delete-icon" name="delete" size={16} color={COLORS.background} />
         </Pressable>
         <View style={[styles.line, isDragging && styles.lineActive]} />
 
@@ -79,7 +81,12 @@ export const SplitLine = ({
             styles.dragHandleIconContainer,
             isDragging && styles.dragHandleIconContainerActive,
           ]}>
-          <MaterialIcons name="drag-indicator" size={16} color={COLORS.background} />
+          <MaterialIcons
+            testID="drag-handle-icon"
+            name="drag-indicator"
+            size={16}
+            color={COLORS.background}
+          />
         </View>
 
         <View style={[styles.iconContainer, styles.indexContainer]}>
@@ -158,7 +165,7 @@ const styles = StyleSheet.create({
   },
   index: {
     fontSize: 12,
-    fontWeight: "500",
+    fontFamily: "Montserrat_500Medium",
     color: COLORS.textSecondary,
     textShadowColor: "rgba(0, 0, 0, 0.25)",
     textShadowOffset: {

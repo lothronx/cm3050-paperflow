@@ -49,10 +49,10 @@ const styles = StyleSheet.create({
   },
   removeText: {
     color: COLORS.secondary,
-    fontWeight: "500",
+    fontFamily: "Montserrat_500Medium",
   },
   addText: {
     color: COLORS.primary,
-    fontWeight: "500",
+    fontFamily: "Montserrat_500Medium",
   },
 });

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, SafeAreaView, ImageBackground } from "react-native";
+import { StyleSheet, View, SafeAreaView, ImageBackground, Platform } from "react-native";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 import type { PageSize } from "@/types/PageSize";
 import { COLORS } from "@/constants/Colors";
 import { AnimatedTitle } from "@/components/AnimatedTitle";
@@ -48,10 +49,26 @@ export default function HomeScreen() {
     });
 
     if (!result.canceled) {
+      let imageUri = result.assets[0].uri;
+
+      // Handle Android-specific behavior
+      if (Platform.OS === "android") {
+        const fileName = imageUri.split("/").pop(); // Extract the file name
+        const newUri = `${FileSystem.cacheDirectory}${fileName}`;
+
+        // Copy the file to a persistent location
+        await FileSystem.copyAsync({
+          from: imageUri,
+          to: newUri,
+        });
+
+        imageUri = newUri; // Update the URI to the persistent location
+      }
+
       router.push({
         pathname: "/split",
         params: {
-          imageUri: result.assets[0].uri,
+          imageUri: imageUri,
           imageHeight: result.assets[0].height,
           imageWidth: result.assets[0].width,
           pageSize: pageSize,

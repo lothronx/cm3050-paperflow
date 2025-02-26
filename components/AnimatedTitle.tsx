@@ -13,7 +13,7 @@ const useLanguageStyles = () => {
   return StyleSheet.create({
     title: {
       fontSize: isChinese ? 62 : 48,
-      fontFamily: isChinese ? "PangMenZhengDao" : "PlayfairDisplay",
+      fontFamily: isChinese ? "PangMenZhengDao" : "PlayfairDisplay-BlackItalic",
     },
   });
 };
@@ -69,10 +69,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 48,
-    fontWeight: "900",
-    fontStyle: "italic",
     color: COLORS.text,
-    fontFamily: "PlayfairDisplay",
     textShadowColor: "rgba(0, 0, 0, 0.25)",
     textShadowOffset: {
       width: 0,
@@ -85,7 +82,6 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 20,
-    fontWeight: "400",
     color: COLORS.textSecondary,
     textShadowColor: "rgba(0, 0, 0, 0.25)",
     textShadowOffset: {
