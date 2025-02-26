@@ -10,9 +10,9 @@ export default function RootLayout() {
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
-        Playfair: require("@/assets/fonts/PlayfairDisplay-BlackItalic.ttf"),
-        Montserrat: require("@/assets/fonts/Montserrat-VariableFont_wght.ttf"),
-        PangMenZhengDao: require("@/assets/fonts/PangMenZhengDaoBiaoTiTi.ttf"),
+        PlayfairDisplay: require("@/assets/fonts/PlayfairDisplay.ttf"),
+        Montserrat: require("@/assets/fonts/Montserrat.ttf"),
+        PangMenZhengDao: require("@/assets/fonts/PangMenZhengDao.ttf"),
       });
       setFontsLoaded(true);
     }

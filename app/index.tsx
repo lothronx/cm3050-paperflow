@@ -42,7 +42,7 @@ export default function HomeScreen() {
   };
 
   const handleSelectImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       quality: 1,
     });
