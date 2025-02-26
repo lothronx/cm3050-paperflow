@@ -2,7 +2,9 @@ import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
 import * as Haptics from "expo-haptics";
 import { COLORS } from "@/constants/Colors";
+import { MARGINS } from "@/constants/Margins";
 import { Text } from "@/components/Text";
+
 
 interface SplitActionsProps {
   onAddSplit: () => void;
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
   button: {
     paddingHorizontal: 16,
     paddingVertical: 16,
-    marginBottom: 32,
+    marginBottom: MARGINS.bottom,
     alignItems: "center",
   },
   removeText: {

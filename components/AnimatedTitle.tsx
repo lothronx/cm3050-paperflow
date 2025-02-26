@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
   },
   subtitle: {
-    fontSize: 20,
+    fontSize: 18,
     color: COLORS.textSecondary,
     textShadowColor: "rgba(0, 0, 0, 0.25)",
     textShadowOffset: {

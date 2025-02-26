@@ -6,6 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import type { PageSize } from "@/types/PageSize";
 import { COLORS } from "@/constants/Colors";
+import { MARGINS } from "@/constants/Margins";
 import { AnimatedTitle } from "@/components/AnimatedTitle";
 import { PageSizeOption } from "@/components/PageSizeOption";
 import { AutoSplitOption } from "@/components/AutoSplitOption";
@@ -133,6 +134,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 16,
-    marginBottom: 32,
+    marginBottom: MARGINS.bottom,
   },
 });

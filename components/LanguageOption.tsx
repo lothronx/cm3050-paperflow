@@ -1,6 +1,7 @@
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
+import { MARGINS } from "@/constants/Margins";
 
 interface LanguageOptionProps {
   isEnglish: boolean;
@@ -26,8 +27,8 @@ export const LanguageOption = ({ isEnglish, onToggle }: LanguageOptionProps) => 
 const styles = StyleSheet.create({
   languageButton: {
     position: "absolute",
-    top: 64,
-    right: 18,
+    top: MARGINS.top,
+    right: MARGINS.horizontal,
     zIndex: 10,
     paddingVertical: 4,
     paddingHorizontal: 8,

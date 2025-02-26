@@ -5,6 +5,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import * as Sharing from "expo-sharing";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
+import { MARGINS } from "@/constants/Margins";
 import type { PageSize } from "@/types/PageSize";
 import { BackArrow } from "@/components/BackArrow";
 import { ImageSwiper } from "@/components/ImageSwiper";
@@ -97,6 +98,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     gap: 10,
-    marginBottom: 32,
+    marginBottom: MARGINS.bottom,
   },
 });

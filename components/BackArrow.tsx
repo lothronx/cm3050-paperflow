@@ -2,6 +2,7 @@ import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
+import { MARGINS } from "@/constants/Margins";
 
 export const BackArrow = () => {
   return (
@@ -16,8 +17,8 @@ export const BackArrow = () => {
 const styles = StyleSheet.create({
   backArrow: {
     position: "absolute",
-    top: 64,
-    left: 18,
+    top: MARGINS.top,
+    left: MARGINS.horizontal,
     zIndex: 10,
     paddingVertical: 6,
     paddingHorizontal: 8,

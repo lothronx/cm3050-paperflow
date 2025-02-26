@@ -1,6 +1,7 @@
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
+import { MARGINS } from "@/constants/Margins";
 
 type CheckArrowProps = {
   onClick: () => void;
@@ -19,8 +20,8 @@ export const CheckArrow = ({ onClick }: CheckArrowProps) => {
 const styles = StyleSheet.create({
   checkArrow: {
     position: "absolute",
-    top: 64,
-    right: 18,
+    top: MARGINS.top,
+    right: MARGINS.horizontal,
     zIndex: 10,
     paddingVertical: 6,
     paddingHorizontal: 8,
