@@ -27,7 +27,9 @@
     "fonts": [
       "./assets/fonts/PlayfairDisplay-BlackItalic.ttf",
       "./assets/fonts/PangMenZhengDao.ttf",
-      "./assets/fonts/Montserrat.ttf"
+      "./assets/fonts/Montserrat-Regular.ttf",
+      "./assets/fonts/Montserrat-Medium.ttf",
+      "./assets/fonts/Montserrat-SemiBold.ttf"
     ],
     "plugins": [
       "expo-router",

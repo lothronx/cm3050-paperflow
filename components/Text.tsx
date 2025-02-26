@@ -1,9 +1,9 @@
-import { StyleSheet, Text as RNText } from "react-native";
+import { StyleSheet, Text as RNText, Platform } from "react-native";
 import type { TextProps } from "react-native";
 
 const defaultStyles = StyleSheet.create({
   text: {
-    fontFamily: "Montserrat_400Regular",
+    fontFamily: Platform.OS === "ios" ? "Montserrat" : "Montserrat-Medium",
     fontSize: 16,
   },
 });

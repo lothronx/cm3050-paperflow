@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 18,
-    fontFamily: "Montserrat_600SemiBold",
+    fontFamily: "Montserrat-SemiBold",
     color: COLORS.text,
   },
   optionItem: {

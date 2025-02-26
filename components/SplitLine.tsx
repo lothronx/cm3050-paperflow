@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   index: {
     fontSize: 12,
-    fontFamily: "Montserrat_500Medium",
+    fontFamily: "Montserrat-Medium",
     color: COLORS.textSecondary,
     textShadowColor: "rgba(0, 0, 0, 0.25)",
     textShadowOffset: {

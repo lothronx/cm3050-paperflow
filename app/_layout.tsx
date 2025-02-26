@@ -11,7 +11,9 @@ export default function RootLayout() {
     async function loadFonts() {
       await Font.loadAsync({
         "PlayfairDisplay-BlackItalic": require("@/assets/fonts/PlayfairDisplay-BlackItalic.ttf"),
-        Montserrat: require("@/assets/fonts/Montserrat.ttf"),
+        "Montserrat-Regular": require("@/assets/fonts/Montserrat-Regular.ttf"),
+        "Montserrat-Medium": require("@/assets/fonts/Montserrat-Medium.ttf"),
+        "Montserrat-SemiBold": require("@/assets/fonts/Montserrat-SemiBold.ttf"),
         PangMenZhengDao: require("@/assets/fonts/PangMenZhengDao.ttf"),
       });
       setFontsLoaded(true);
