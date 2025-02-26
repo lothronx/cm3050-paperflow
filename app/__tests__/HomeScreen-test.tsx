@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react-native";
 
-import HomeScreen, { CustomText } from "@/app";
+import HomeScreen from "@/app";
 
 describe("<HomeScreen />", () => {
   test("example test", () => {

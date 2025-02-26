@@ -8,7 +8,7 @@ interface ZoomControlProps {
 }
 
 export const ZoomControl = ({ isZoomedIn, onToggle }: ZoomControlProps) => (
-  <Pressable onPress={onToggle} style={styles.zoomButton}>
+  <Pressable onPress={onToggle} style={styles.zoomButton} testID="zoom-button">
     <MaterialIcons
       name={isZoomedIn ? "zoom-in-map" : "zoom-out-map"}
       size={18}

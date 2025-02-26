@@ -9,7 +9,7 @@ type CheckArrowProps = {
 export const CheckArrow = ({ onClick }: CheckArrowProps) => {
   return (
     <View style={styles.checkArrow}>
-      <TouchableOpacity onPress={onClick}>
+      <TouchableOpacity onPress={onClick} testID="check-arrow-button">
         <Ionicons name="checkmark" size={24} color={COLORS.background} />
       </TouchableOpacity>
     </View>

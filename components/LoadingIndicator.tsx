@@ -3,8 +3,8 @@ import { COLORS } from "@/constants/Colors";
 
 export function LoadingIndicator() {
   return (
-    <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color={COLORS.primary} />
+    <View style={styles.loadingContainer} testID="loading-container">
+      <ActivityIndicator size="large" color={COLORS.primary} testID="loading-indicator" />
     </View>
   );
 }

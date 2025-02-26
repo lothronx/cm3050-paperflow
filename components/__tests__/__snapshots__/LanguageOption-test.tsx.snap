@@ -1,0 +1,121 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LanguageOption should match snapshot when English is not selected 1`] = `
+<View
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    {
+      "backgroundColor": "#636E72",
+      "borderRadius": 8,
+      "elevation": 5,
+      "opacity": 1,
+      "paddingHorizontal": 8,
+      "paddingVertical": 4,
+      "position": "absolute",
+      "right": 18,
+      "shadowColor": "#000",
+      "shadowOffset": {
+        "height": 2,
+        "width": 0,
+      },
+      "shadowOpacity": 0.1,
+      "shadowRadius": 3.84,
+      "top": 64,
+      "zIndex": 10,
+    }
+  }
+  testID="language-option-button"
+>
+  <FontAwesome6
+    color="#FFFFFF"
+    name="language"
+    size={18}
+  />
+</View>
+`;
+
+exports[`LanguageOption should match snapshot when English is selected 1`] = `
+<View
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": undefined,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    {
+      "backgroundColor": "#FFFFFF",
+      "borderRadius": 8,
+      "elevation": 5,
+      "opacity": 1,
+      "paddingHorizontal": 8,
+      "paddingVertical": 4,
+      "position": "absolute",
+      "right": 18,
+      "shadowColor": "#000",
+      "shadowOffset": {
+        "height": 2,
+        "width": 0,
+      },
+      "shadowOpacity": 0.1,
+      "shadowRadius": 3.84,
+      "top": 64,
+      "zIndex": 10,
+    }
+  }
+  testID="language-option-button"
+>
+  <FontAwesome6
+    color="#636E72"
+    name="language"
+    size={18}
+  />
+</View>
+`;

@@ -10,6 +10,7 @@ interface LanguageOptionProps {
 export const LanguageOption = ({ isEnglish, onToggle }: LanguageOptionProps) => (
   <TouchableOpacity
     onPress={onToggle}
+    testID="language-option-button"
     style={[
       styles.languageButton,
       { backgroundColor: isEnglish ? COLORS.background : COLORS.textSecondary },

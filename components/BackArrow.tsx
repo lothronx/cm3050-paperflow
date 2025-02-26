@@ -3,11 +3,10 @@ import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
 
-
 export const BackArrow = () => {
   return (
     <View style={styles.backArrow}>
-      <TouchableOpacity onPress={() => router.back()}>
+      <TouchableOpacity onPress={() => router.back()} testID="back-arrow-button">
         <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
       </TouchableOpacity>
     </View>

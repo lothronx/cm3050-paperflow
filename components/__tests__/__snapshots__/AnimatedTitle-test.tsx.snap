@@ -1,0 +1,229 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AnimatedTitle should match snapshot for Chinese 1`] = `
+<View
+  style={
+    [
+      {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+        "marginVertical": 40,
+      },
+      {},
+    ]
+  }
+>
+  <View
+    style={
+      {
+        "flexDirection": "row",
+        "marginBottom": 8,
+      }
+    }
+  >
+    <Text
+      style={
+        [
+          {
+            "fontFamily": "Montserrat",
+            "fontSize": 16,
+          },
+          [
+            {
+              "color": "#2D3436",
+              "fontFamily": "PlayfairDisplay",
+              "fontSize": 48,
+              "fontStyle": "italic",
+              "fontWeight": "900",
+              "textShadowColor": "rgba(0, 0, 0, 0.25)",
+              "textShadowOffset": {
+                "height": 2,
+                "width": 0,
+              },
+              "textShadowRadius": 3.84,
+            },
+            {
+              "fontFamily": "PangMenZhengDao",
+              "fontSize": 62,
+            },
+          ],
+        ]
+      }
+    >
+      Welcome to
+    </Text>
+    <Text
+      style={
+        [
+          {
+            "fontFamily": "Montserrat",
+            "fontSize": 16,
+          },
+          [
+            {
+              "color": "#2D3436",
+              "fontFamily": "PlayfairDisplay",
+              "fontSize": 48,
+              "fontStyle": "italic",
+              "fontWeight": "900",
+              "textShadowColor": "rgba(0, 0, 0, 0.25)",
+              "textShadowOffset": {
+                "height": 2,
+                "width": 0,
+              },
+              "textShadowRadius": 3.84,
+            },
+            {
+              "color": "#6A7BFF",
+            },
+            {
+              "fontFamily": "PangMenZhengDao",
+              "fontSize": 62,
+            },
+          ],
+        ]
+      }
+    >
+      PaperFlow
+    </Text>
+  </View>
+  <Text
+    style={
+      [
+        {
+          "fontFamily": "Montserrat",
+          "fontSize": 16,
+        },
+        {
+          "color": "#636E72",
+          "fontSize": 20,
+          "fontWeight": "400",
+          "textShadowColor": "rgba(0, 0, 0, 0.25)",
+          "textShadowOffset": {
+            "height": 2,
+            "width": 0,
+          },
+          "textShadowRadius": 3.84,
+        },
+      ]
+    }
+  >
+    Your Digital Document Assistant
+  </Text>
+</View>
+`;
+
+exports[`AnimatedTitle should match snapshot for English 1`] = `
+<View
+  style={
+    [
+      {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+        "marginVertical": 40,
+      },
+      {},
+    ]
+  }
+>
+  <View
+    style={
+      {
+        "flexDirection": "row",
+        "marginBottom": 8,
+      }
+    }
+  >
+    <Text
+      style={
+        [
+          {
+            "fontFamily": "Montserrat",
+            "fontSize": 16,
+          },
+          [
+            {
+              "color": "#2D3436",
+              "fontFamily": "PlayfairDisplay",
+              "fontSize": 48,
+              "fontStyle": "italic",
+              "fontWeight": "900",
+              "textShadowColor": "rgba(0, 0, 0, 0.25)",
+              "textShadowOffset": {
+                "height": 2,
+                "width": 0,
+              },
+              "textShadowRadius": 3.84,
+            },
+            {
+              "fontFamily": "PlayfairDisplay",
+              "fontSize": 48,
+            },
+          ],
+        ]
+      }
+    >
+      Welcome to
+    </Text>
+    <Text
+      style={
+        [
+          {
+            "fontFamily": "Montserrat",
+            "fontSize": 16,
+          },
+          [
+            {
+              "color": "#2D3436",
+              "fontFamily": "PlayfairDisplay",
+              "fontSize": 48,
+              "fontStyle": "italic",
+              "fontWeight": "900",
+              "textShadowColor": "rgba(0, 0, 0, 0.25)",
+              "textShadowOffset": {
+                "height": 2,
+                "width": 0,
+              },
+              "textShadowRadius": 3.84,
+            },
+            {
+              "color": "#6A7BFF",
+            },
+            {
+              "fontFamily": "PlayfairDisplay",
+              "fontSize": 48,
+            },
+          ],
+        ]
+      }
+    >
+      PaperFlow
+    </Text>
+  </View>
+  <Text
+    style={
+      [
+        {
+          "fontFamily": "Montserrat",
+          "fontSize": 16,
+        },
+        {
+          "color": "#636E72",
+          "fontSize": 20,
+          "fontWeight": "400",
+          "textShadowColor": "rgba(0, 0, 0, 0.25)",
+          "textShadowOffset": {
+            "height": 2,
+            "width": 0,
+          },
+          "textShadowRadius": 3.84,
+        },
+      ]
+    }
+  >
+    Your Digital Document Assistant
+  </Text>
+</View>
+`;

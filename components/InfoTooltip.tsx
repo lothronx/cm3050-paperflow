@@ -4,7 +4,6 @@ import Tooltip from "react-native-walkthrough-tooltip";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/Colors";
 
-
 interface InfoTooltipProps {
   content: string;
 }
@@ -18,7 +17,7 @@ export const InfoTooltip = ({ content }: InfoTooltipProps) => {
       content={<Text>{content}</Text>}
       placement="top"
       onClose={() => setShowTooltip(false)}>
-      <TouchableOpacity onPress={() => setShowTooltip(true)}>
+      <TouchableOpacity onPress={() => setShowTooltip(true)} testID="info-tooltip-button">
         <View style={styles.helpIcon}>
           <Ionicons name="help-circle" size={16} color={COLORS.textSecondary} />
         </View>
