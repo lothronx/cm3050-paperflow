@@ -1,6 +1,7 @@
 import Swiper from "react-native-swiper";
 import { View, Image, StyleSheet, StatusBar } from "react-native";
 import { COLORS } from "@/constants/Colors";
+import { MARGINS } from "@/constants/Margins";
 
 interface ImageSwiperProps {
   images: string[];
@@ -31,7 +32,7 @@ export const ImageSwiper = ({ images }: ImageSwiperProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 16,
+    marginHorizontal: MARGINS.horizontal,
     marginTop: 12,
     marginBottom: 40,
     shadowColor: "#000",

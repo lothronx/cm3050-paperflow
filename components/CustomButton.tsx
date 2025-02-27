@@ -1,6 +1,7 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
+import { MARGINS } from "@/constants/Margins";
 
 interface CustomButtonProps {
   text: string;
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 12,
     alignItems: "center",
-    marginHorizontal: 16,
+    marginHorizontal: MARGINS.horizontal,
     backgroundColor: COLORS.primary,
     shadowColor: "rgba(0, 0, 0, 0.5)",
     shadowOffset: {

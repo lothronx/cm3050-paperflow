@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     borderTopColor: COLORS.border,
   },
   button: {
-    paddingHorizontal: 16,
+    paddingHorizontal: MARGINS.horizontal,
     paddingVertical: 16,
     marginBottom: MARGINS.bottom,
     alignItems: "center",

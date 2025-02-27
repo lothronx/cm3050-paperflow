@@ -2,6 +2,7 @@ import { StyleSheet, View, Switch } from "react-native";
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
 import { InfoTooltip } from "@/components/InfoTooltip";
+import { MARGINS } from "@/constants/Margins";
 interface AutoSplitOptionProps {
   title: string;
   tooltip?: string;
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: MARGINS.horizontal,
   },
   titleContainer: {
     flexDirection: "row",

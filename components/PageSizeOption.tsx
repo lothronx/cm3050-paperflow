@@ -7,6 +7,7 @@ import { PageSizes } from "@/constants/PageSizes";
 import { Text } from "@/components/Text";
 import { PageSizeModal } from "@/components/PageSizeModal";
 import { InfoTooltip } from "@/components/InfoTooltip";
+import { MARGINS } from "@/constants/Margins";
 
 interface PageSizeOptionProps {
   title: string;
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: MARGINS.horizontal,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: COLORS.border,
   },

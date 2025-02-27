@@ -18,7 +18,7 @@ export const LanguageOption = ({ isEnglish, onToggle }: LanguageOptionProps) => 
     ]}>
     <FontAwesome6
       name={"language"}
-      size={18}
+      size={24}
       color={isEnglish ? COLORS.textSecondary : COLORS.background}
     />
   </TouchableOpacity>
@@ -30,9 +30,9 @@ const styles = StyleSheet.create({
     top: MARGINS.top,
     right: MARGINS.horizontal,
     zIndex: 10,
-    paddingVertical: 4,
+    paddingVertical: 6,
     paddingHorizontal: 8,
-    borderRadius: 8,
+    borderRadius: 999,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
