@@ -41,8 +41,8 @@ describe("SplitLine", () => {
     expect(getByText("1")).toBeTruthy();
 
     // Check if icons are rendered
-    expect(getByTestId("delete-icon")).toBeTruthy();
-    expect(getByTestId("drag-handle-icon")).toBeTruthy();
+    expect(getByTestId("split-line-delete-icon")).toBeTruthy();
+    expect(getByTestId("split-line-drag-icon")).toBeTruthy();
   });
 
   it("applies correct position and width styles", () => {
@@ -60,7 +60,7 @@ describe("SplitLine", () => {
   it("triggers haptic feedback and calls onRemoveSplit when delete button is pressed", () => {
     const { getByTestId } = render(<SplitLine {...defaultProps} />);
 
-    fireEvent.press(getByTestId("delete-button"));
+    fireEvent.press(getByTestId("split-line-delete-button"));
 
     expect(Haptics.notificationAsync).toHaveBeenCalledWith(
       Haptics.NotificationFeedbackType.Warning

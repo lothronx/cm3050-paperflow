@@ -58,14 +58,14 @@ export const PageSizeModal = ({
         style={styles.modalOverlay}
         activeOpacity={1}
         onPress={onClose}
-        testID="modal-overlay">
+        testID="page-size-modal-overlay">
         {/* Safe area container for modal content */}
         <SafeAreaView style={styles.modalContent}>
           <TouchableOpacity activeOpacity={1}>
             {/* Modal header with title and close button */}
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{t("modal.title")}</Text>
-              <TouchableOpacity onPress={onClose} testID="close-button">
+              <TouchableOpacity onPress={onClose} testID="page-size-modal-close-button">
                 <Ionicons name="close" size={24} color={COLORS.text} />
               </TouchableOpacity>
             </View>

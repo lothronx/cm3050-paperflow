@@ -49,7 +49,7 @@ describe("PageSizeModal", () => {
   it("calls onClose when overlay is pressed", () => {
     render(<PageSizeModal {...defaultProps} />);
 
-    const overlay = screen.getByTestId("modal-overlay");
+    const overlay = screen.getByTestId("page-size-modal-overlay");
     fireEvent.press(overlay);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -58,7 +58,7 @@ describe("PageSizeModal", () => {
   it("calls onClose when close button is pressed", () => {
     render(<PageSizeModal {...defaultProps} />);
 
-    const closeButton = screen.getByTestId("close-button");
+    const closeButton = screen.getByTestId("page-size-modal-close-button");
     fireEvent.press(closeButton);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
