@@ -1,9 +1,30 @@
+/**
+ * Back Arrow Component
+ * 
+ * Provides a navigation button to go back to the previous screen
+ * Features:
+ * - Chevron back icon
+ * - Shadow effect for visibility
+ * - Absolute positioning in top-left corner
+ * - Handles navigation via expo-router
+ */
+
+// React Native core imports
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
+
+// Icon library
 import { Ionicons } from "@expo/vector-icons";
+
+// Custom constants
 import { COLORS } from "@/constants/Colors";
 import { MARGINS } from "@/constants/Margins";
 
+/**
+ * Back Arrow Component
+ * 
+ * Displays a back button in the top-left corner of the screen
+ */
 export const BackArrow = () => {
   return (
     <View style={styles.backArrow}>
@@ -14,6 +35,7 @@ export const BackArrow = () => {
   );
 };
 
+// Styles for component layout and appearance
 const styles = StyleSheet.create({
   backArrow: {
     position: "absolute",

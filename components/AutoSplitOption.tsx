@@ -1,8 +1,31 @@
+/**
+ * Auto Split Option Component
+ * 
+ * Provides a toggle switch for enabling/disabling automatic image splitting
+ * Includes:
+ * - Title text
+ * - Optional tooltip for additional information
+ * - Custom styled switch
+ */
+
+// React Native core imports
 import { StyleSheet, View, Switch } from "react-native";
+
+// Custom constants and components
 import { COLORS } from "@/constants/Colors";
+import { MARGINS } from "@/constants/Margins";
 import { Text } from "@/components/Text";
 import { InfoTooltip } from "@/components/InfoTooltip";
-import { MARGINS } from "@/constants/Margins";
+
+
+/**
+ * Props for AutoSplitOption component
+ * 
+ * @property title - The text to display next to the switch
+ * @property tooltip - Optional tooltip content for additional information
+ * @property defaultValue - Initial value of the switch
+ * @property onValueChange - Callback when switch value changes
+ */
 interface AutoSplitOptionProps {
   title: string;
   tooltip?: string;
@@ -10,13 +33,26 @@ interface AutoSplitOptionProps {
   onValueChange: (value: boolean) => void;
 }
 
-export const AutoSplitOption = ({ title, tooltip, defaultValue, onValueChange }: AutoSplitOptionProps) => {
+/**
+ * Auto Split Option Component
+ * 
+ * Displays a toggle switch with title and optional tooltip
+ */
+export const AutoSplitOption = ({
+  title,
+  tooltip,
+  defaultValue,
+  onValueChange,
+}: AutoSplitOptionProps) => {
   return (
     <View style={styles.container}>
+      {/* Title and tooltip container */}
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{title}</Text>
         {tooltip && <InfoTooltip content={tooltip} />}
       </View>
+
+      {/* Toggle switch */}
       <Switch
         value={defaultValue}
         onValueChange={onValueChange}
@@ -27,6 +63,7 @@ export const AutoSplitOption = ({ title, tooltip, defaultValue, onValueChange }:
   );
 };
 
+// Styles for component layout and appearance
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",

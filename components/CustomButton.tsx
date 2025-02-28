@@ -1,8 +1,29 @@
+/**
+ * Custom Button Component
+ * 
+ * Provides a reusable button with:
+ * - Solid and outline variants
+ * - Optional icon support
+ * - Shadow effects
+ * - Consistent styling across the app
+ */
+
+// React Native core imports
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+
+// Custom constants and components
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
 import { MARGINS } from "@/constants/Margins";
 
+/**
+ * Props for CustomButton component
+ * 
+ * @property text - The button text
+ * @property onPress - Callback when button is pressed
+ * @property variant - Button style variant (solid or outline)
+ * @property icon - Optional icon to display before the text
+ */
 interface CustomButtonProps {
   text: string;
   onPress: () => void;
@@ -10,7 +31,17 @@ interface CustomButtonProps {
   icon?: React.ReactNode;
 }
 
-export const CustomButton = ({ text, onPress, variant = "solid", icon }: CustomButtonProps) => {
+/**
+ * Custom Button Component
+ * 
+ * Displays a styled button with optional icon and variants
+ */
+export const CustomButton = ({
+  text,
+  onPress,
+  variant = "solid",
+  icon,
+}: CustomButtonProps) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -26,6 +57,7 @@ export const CustomButton = ({ text, onPress, variant = "solid", icon }: CustomB
   );
 };
 
+// Styles for component layout and appearance
 const styles = StyleSheet.create({
   button: {
     paddingVertical: 16,

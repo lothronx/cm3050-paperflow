@@ -1,9 +1,29 @@
+/**
+ * Home Screen Component for the PaperFlow application
+ * 
+ * This is the main entry point of the application where users can:
+ * - Select their preferred page size (A4, etc.)
+ * - Toggle automatic page splitting
+ * - Choose the application language
+ * - Select images for processing
+ * 
+ * The component handles user preferences persistence and navigation to the split screen
+ * when an image is selected.
+ */
+
+// Core React and React Native imports
 import { useState, useEffect } from "react";
 import { StyleSheet, View, SafeAreaView, ImageBackground, Platform } from "react-native";
-import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
+
+// Internationalization
+import { useTranslation } from "react-i18next";
+
+// Image handling and file system
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+
+// Custom constants, types, and components
 import type { PageSize } from "@/types/PageSize";
 import { COLORS } from "@/constants/Colors";
 import { MARGINS } from "@/constants/Margins";
@@ -14,12 +34,22 @@ import { CustomButton } from "@/components/CustomButton";
 import { LanguageOption } from "@/components/LanguageOption";
 import { StorageService } from "@/services/storage";
 
+/**
+ * Home Screen Component
+ * 
+ * Handles user preferences, image selection, and navigation to the split screen
+ */
 export default function HomeScreen() {
   const { t, i18n } = useTranslation();
 
+  // State management for user preferences
   const [autoSplit, setAutoSplit] = useState(true);
   const [pageSize, setPageSize] = useState<PageSize>("A4");
 
+  /**
+   * Load saved user settings on component mount
+   * Retrieves previously saved page size and auto-split preferences
+   */
   useEffect(() => {
     const loadSettings = async () => {
       const settings = await StorageService.getSettings();
@@ -29,20 +59,37 @@ export default function HomeScreen() {
     loadSettings();
   }, []);
 
+  /**
+   * Updates the selected page size and persists it to storage
+   * @param selectedSize - The new page size selected by the user
+   */
   const handlePageSizeChange = async (selectedSize: PageSize) => {
     setPageSize(selectedSize);
     await StorageService.savePageSize(selectedSize);
   };
 
+  /**
+   * Updates the auto-split preference and persists it to storage
+   * @param value - The new auto-split value
+   */
   const handleAutoSplitChange = async (value: boolean) => {
     setAutoSplit(value);
     await StorageService.saveAutoSplit(value);
   };
 
+  /**
+   * Toggles between English and Chinese language
+   */
   const handleLanguageChange = async () => {
     i18n.changeLanguage(i18n.language === "en" ? "zh" : "en");
   };
 
+  /**
+   * Handles image selection from device library
+   * - Opens image picker
+   * - Handles platform-specific URI management for Android
+   * - Navigates to split screen with image and settings
+   */
   const handleSelectImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -80,15 +127,20 @@ export default function HomeScreen() {
   };
 
   return (
+    // Main background container with image
     <ImageBackground
       source={require("@/assets/images/background.jpeg")}
       style={styles.backgroundImage}
       resizeMode="cover">
+      {/* Language toggle in the top-right corner */}
       <LanguageOption isEnglish={i18n.language === "en"} onToggle={handleLanguageChange} />
+      
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
+          {/* Animated title component */}
           <AnimatedTitle />
 
+          {/* User settings section */}
           <View style={styles.settings}>
             <PageSizeOption
               title={t("home.pageSize")}
@@ -104,6 +156,7 @@ export default function HomeScreen() {
             />
           </View>
 
+          {/* Image selection button */}
           <View style={styles.buttonContainer}>
             <CustomButton text={t("home.selectImage")} onPress={handleSelectImage} />
           </View>
@@ -113,6 +166,7 @@ export default function HomeScreen() {
   );
 }
 
+// Styles for component layout and appearance
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
