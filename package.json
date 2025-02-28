@@ -37,6 +37,7 @@
     "expo-constants": "~17.0.6",
     "expo-font": "~13.0.3",
     "expo-haptics": "~14.0.1",
+    "expo-image": "~2.0.6",
     "expo-image-manipulator": "~13.0.6",
     "expo-image-picker": "~16.0.6",
     "expo-linear-gradient": "~14.0.2",
@@ -64,12 +65,12 @@
     "react-native-swiper": "^1.6.0",
     "react-native-walkthrough-tooltip": "^1.6.0",
     "react-native-web": "~0.19.13",
-    "react-native-webview": "13.12.5",
-    "expo-image": "~2.0.6"
+    "react-native-webview": "13.12.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "@testing-library/react-native": "^13.0.1",
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^13.1.0",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",
     "jest": "^29.7.0",

@@ -45,7 +45,7 @@ export const AutoSplitOption = ({
   onValueChange,
 }: AutoSplitOptionProps) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="auto-split-option">
       {/* Title and tooltip container */}
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{title}</Text>

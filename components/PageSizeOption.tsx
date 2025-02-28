@@ -1,6 +1,6 @@
 /**
  * Page Size Option Component
- * 
+ *
  * Provides a UI for selecting a page size from predefined options.
  * Includes:
  * - Title text
@@ -24,10 +24,9 @@ import { Text } from "@/components/Text";
 import { PageSizeModal } from "@/components/PageSizeModal";
 import { InfoTooltip } from "@/components/InfoTooltip";
 
-
 /**
  * Props for PageSizeOption component
- * 
+ *
  * @property title - The text to display next to the page size selector
  * @property tooltip - Optional tooltip content for additional information
  * @property defaultValue - The currently selected page size
@@ -42,7 +41,7 @@ interface PageSizeOptionProps {
 
 /**
  * Page Size Option Component
- * 
+ *
  * Displays a selector for choosing a page size from predefined options.
  * Opens a modal for selection when the button is pressed.
  */
@@ -61,22 +60,20 @@ export const PageSizeOption = ({
   };
 
   return (
-    <>
-      <View style={styles.container}>
-        {/* Title and tooltip container */}
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>{title}</Text>
-          {tooltip && <InfoTooltip content={tooltip} />}
-        </View>
-
-        {/* Button to open the page size selection modal */}
-        <TouchableOpacity onPress={() => setIsModalVisible(true)} testID="page-size-button">
-          <View style={styles.rightContent}>
-            {defaultValue && <Text style={styles.value}>{defaultValue}</Text>}
-            <Ionicons name="chevron-forward" size={20} color={COLORS.textSecondary} />
-          </View>
-        </TouchableOpacity>
+    <View style={styles.container} testID="page-size-option">
+      {/* Title and tooltip container */}
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>{title}</Text>
+        {tooltip && <InfoTooltip content={tooltip} />}
       </View>
+
+      {/* Button to open the page size selection modal */}
+      <TouchableOpacity onPress={() => setIsModalVisible(true)} testID="page-size-button">
+        <View style={styles.rightContent}>
+          {defaultValue && <Text style={styles.value}>{defaultValue}</Text>}
+          <Ionicons name="chevron-forward" size={20} color={COLORS.textSecondary} />
+        </View>
+      </TouchableOpacity>
 
       {/* Modal for selecting a page size */}
       <PageSizeModal
@@ -86,7 +83,7 @@ export const PageSizeOption = ({
         value={defaultValue}
         options={Object.keys(PageSizes) as PageSize[]}
       />
-    </>
+    </View>
   );
 };
 
