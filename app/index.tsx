@@ -1,12 +1,12 @@
 /**
  * Home Screen Component for the PaperFlow application
- * 
+ *
  * This is the main entry point of the application where users can:
  * - Select their preferred page size (A4, etc.)
  * - Toggle automatic page splitting
  * - Choose the application language
  * - Select images for processing
- * 
+ *
  * The component handles user preferences persistence and navigation to the split screen
  * when an image is selected.
  */
@@ -32,11 +32,13 @@ import { PageSizeOption } from "@/components/PageSizeOption";
 import { AutoSplitOption } from "@/components/AutoSplitOption";
 import { CustomButton } from "@/components/CustomButton";
 import { LanguageOption } from "@/components/LanguageOption";
+
+// Storage service
 import { StorageService } from "@/services/storage";
 
 /**
  * Home Screen Component
- * 
+ *
  * Handles user preferences, image selection, and navigation to the split screen
  */
 export default function HomeScreen() {
@@ -134,7 +136,7 @@ export default function HomeScreen() {
       resizeMode="cover">
       {/* Language toggle in the top-right corner */}
       <LanguageOption isEnglish={i18n.language === "en"} onToggle={handleLanguageChange} />
-      
+
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           {/* Animated title component */}

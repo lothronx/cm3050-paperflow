@@ -1,122 +1,106 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getLocales } from "expo-localization";
+import { StorageService } from "@/services/storage";
 import i18n from "@/services/translation";
 
-// Mock AsyncStorage
-jest.mock("@react-native-async-storage/async-storage", () => ({
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-}));
-
-// Mock expo-localization
+// Mock dependencies
 jest.mock("expo-localization", () => ({
   getLocales: jest.fn(),
 }));
 
-describe("LanguageDetector", () => {
-  // Reset mocks before each test
-  beforeEach(() => {
-    jest.clearAllMocks();
-    (AsyncStorage.getItem as jest.Mock).mockReset();
-    (AsyncStorage.setItem as jest.Mock).mockReset();
-    (getLocales as jest.Mock).mockReset();
-  });
+jest.mock("@/services/storage", () => ({
+  StorageService: {
+    getUserLanguage: jest.fn(),
+    saveUserLanguage: jest.fn(),
+  },
+}));
 
-  describe("detect", () => {
-    test("uses saved language preference if available", async () => {
-      // Mock saved language
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce("zh");
+// Mock console.error to prevent noise in test output
+beforeEach(() => {
+  jest.clearAllMocks();
+  jest.spyOn(console, "error").mockImplementation(() => {});
+});
 
-      const callback = jest.fn();
-      await i18n.services.languageDetector.detect(callback);
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
-      expect(callback).toHaveBeenCalledWith("zh");
-      expect(AsyncStorage.getItem).toHaveBeenCalledWith("user-language");
+describe("Translation Service", () => {
+  describe("Language Detection", () => {
+    test("uses saved language preference when available", async () => {
+      (StorageService.getUserLanguage as jest.Mock).mockResolvedValueOnce("zh");
+      
+      // Trigger language detection by changing language
+      await i18n.changeLanguage();
+      
+      expect(await i18n.language).toBe("zh");
+      expect(StorageService.getUserLanguage).toHaveBeenCalled();
     });
 
-    test("uses device language if no saved preference and language is supported", async () => {
-      // Mock no saved language
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null);
-      // Mock device locale
+    test("falls back to device language when no saved preference exists", async () => {
+      (StorageService.getUserLanguage as jest.Mock).mockResolvedValueOnce(null);
       (getLocales as jest.Mock).mockReturnValueOnce([{ languageCode: "zh" }]);
-
-      const callback = jest.fn();
-      await i18n.services.languageDetector.detect(callback);
-
-      expect(callback).toHaveBeenCalledWith("zh");
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith("user-language", "zh");
+      
+      await i18n.changeLanguage();
+      
+      expect(await i18n.language).toBe("zh");
+      expect(StorageService.saveUserLanguage).toHaveBeenCalledWith("zh");
     });
 
-    test("falls back to English for unsupported device language", async () => {
-      // Mock no saved language
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null);
-      // Mock unsupported device locale
+    test("uses English for unsupported device language", async () => {
+      (StorageService.getUserLanguage as jest.Mock).mockResolvedValueOnce(null);
       (getLocales as jest.Mock).mockReturnValueOnce([{ languageCode: "fr" }]);
-
-      const callback = jest.fn();
-      await i18n.services.languageDetector.detect(callback);
-
-      expect(callback).toHaveBeenCalledWith("en");
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith("user-language", "en");
+      
+      await i18n.changeLanguage();
+      
+      expect(await i18n.language).toBe("en");
+      expect(StorageService.saveUserLanguage).toHaveBeenCalledWith("en");
     });
 
-    test("falls back to English when no device locale is available", async () => {
-      // Mock no saved language
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null);
-      // Mock no device locale
+    test("defaults to English when no device locale is available", async () => {
+      (StorageService.getUserLanguage as jest.Mock).mockResolvedValueOnce(null);
       (getLocales as jest.Mock).mockReturnValueOnce([]);
-
-      const callback = jest.fn();
-      await i18n.services.languageDetector.detect(callback);
-
-      expect(callback).toHaveBeenCalledWith("en");
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith("user-language", "en");
+      
+      await i18n.changeLanguage();
+      
+      expect(await i18n.language).toBe("en");
+      expect(StorageService.saveUserLanguage).toHaveBeenCalledWith("en");
     });
 
-    test("falls back to English on AsyncStorage error", async () => {
-      // Mock AsyncStorage error
-      (AsyncStorage.getItem as jest.Mock).mockRejectedValueOnce(new Error("Storage error"));
-
-      const callback = jest.fn();
-      await i18n.services.languageDetector.detect(callback);
-
-      expect(callback).toHaveBeenCalledWith("en");
+    test("defaults to English on storage error", async () => {
+      (StorageService.getUserLanguage as jest.Mock).mockRejectedValueOnce(new Error("Storage error"));
+      
+      await i18n.changeLanguage();
+      
+      expect(await i18n.language).toBe("en");
     });
   });
 
-  describe("cacheUserLanguage", () => {
-    test("saves language preference successfully", async () => {
-      await i18n.services.languageDetector.cacheUserLanguage("zh");
-
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith("user-language", "zh");
-    });
-
-    test("silently handles AsyncStorage errors", async () => {
-      // Mock AsyncStorage error
-      (AsyncStorage.setItem as jest.Mock).mockRejectedValueOnce(new Error("Storage error"));
-
-      // Should not throw error
-      await expect(i18n.services.languageDetector.cacheUserLanguage("zh")).resolves.not.toThrow();
-    });
-  });
-
-  describe("i18n configuration", () => {
-    test("has correct initial configuration", () => {
-      expect(i18n.options.fallbackLng).toEqual(["en"]);
-      expect(i18n.options.interpolation?.escapeValue).toBe(false);
-    });
-
-    test("has all required language resources", () => {
-      expect(i18n.options.resources).toHaveProperty("en.translation");
-      expect(i18n.options.resources).toHaveProperty("zh.translation");
-    });
-
-    test("can change language", async () => {
+  describe("Language Caching", () => {
+    test("saves language preference when changed", async () => {
       await i18n.changeLanguage("zh");
-      expect(i18n.language).toBe("zh");
+      
+      expect(StorageService.saveUserLanguage).toHaveBeenCalledWith("zh");
+    });
 
-      await i18n.changeLanguage("en");
-      expect(i18n.language).toBe("en");
+    test("handles storage errors gracefully when saving language", async () => {
+      (StorageService.saveUserLanguage as jest.Mock).mockRejectedValueOnce(new Error("Storage error"));
+      
+      // Should not throw error
+      await expect(i18n.changeLanguage("zh")).resolves.not.toThrow();
+    });
+  });
+
+  describe("Translation Resources", () => {
+    test("has English translations loaded", () => {
+      expect(i18n.hasResourceBundle("en", "translation")).toBe(true);
+    });
+
+    test("has Chinese translations loaded", () => {
+      expect(i18n.hasResourceBundle("zh", "translation")).toBe(true);
+    });
+
+    test("uses English as fallback language", () => {
+      expect(i18n.options.fallbackLng).toEqual(["en"]);
     });
   });
 });

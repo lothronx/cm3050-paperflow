@@ -1,6 +1,6 @@
 export const PageSizes = {
   A4: {
-    width: 595,
+    width: 595, // unit: points
     height: 842,
   },
   Letter: {

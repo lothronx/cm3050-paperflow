@@ -1,11 +1,44 @@
+/**
+ * SplitLine Component for the PaperFlow application
+ * 
+ * This component renders a draggable line that:
+ * - Indicates where a page will be split
+ * - Allows users to adjust the split position through drag gestures
+ * - Provides haptic feedback during interactions
+ * - Shows line index and delete controls
+ * 
+ * Features:
+ * - Draggable line with visual feedback
+ * - Delete button with warning haptics
+ * - Line index display
+ * - Gesture handling with haptic feedback
+ */
+
+// React and React Native imports
 import { useState } from "react";
 import { StyleSheet, View, Pressable } from "react-native";
+
+// Gesture handling and haptic feedback
 import { PanGestureHandler, PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
-import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+
+// Icon library
+import { MaterialIcons } from "@expo/vector-icons";
+
+// Custom constants and components
 import { COLORS } from "@/constants/Colors";
 import { Text } from "@/components/Text";
 
+/**
+ * Props for the SplitLine component
+ * 
+ * @param index - The index of the split line
+ * @param positionDisplay - The display position of the split line
+ * @param splitLineWidth - The width of the split line
+ * @param onUpdatePosition - Callback function to update the split line position
+ * @param onRemoveSplit - Callback function to remove the split line
+ * @param onDragEnd - Callback function to handle drag end event
+ */
 interface SplitLineProps {
   index: number;
   positionDisplay: number;
@@ -15,6 +48,12 @@ interface SplitLineProps {
   onDragEnd: () => void;
 }
 
+/**
+ * SplitLine Component
+ * 
+ * A draggable line component that represents a page split point.
+ * Includes gesture handling, haptic feedback, and visual indicators.
+ */
 export const SplitLine = ({
   index,
   positionDisplay,
@@ -45,14 +84,16 @@ export const SplitLine = ({
   };
 
   return (
+    // Wrap the entire component in a gesture handler for drag interactions
     <PanGestureHandler
       onGestureEvent={handleGestureEvent}
       onBegan={handleGestureBegin}
       onEnded={handleGestureEnd}
       onFailed={handleGestureEnd}
       onCancelled={handleGestureEnd}
-      minDist={0}
-      activeOffsetY={[-5, 5]}>
+      minDist={0}  // Allow immediate response to vertical movement
+      activeOffsetY={[-5, 5]}>  {/* Activate gesture after 5px vertical movement */}
+      {/* Main container positioned absolutely based on split position */}
       <View
         testID="split-line-container"
         style={[
@@ -60,26 +101,30 @@ export const SplitLine = ({
           {
             top: positionDisplay,
             width: splitLineWidth,
-            transform: [{ translateX: -splitLineWidth / 2 }],
+            transform: [{ translateX: -splitLineWidth / 2 }],  // Center the line horizontally
           },
         ]}>
+        {/* Delete button - left side of the line */}
         <Pressable
           testID="delete-button"
           onPress={handleRemoveSplit}
           style={({ pressed }) => [
             styles.iconContainer,
             styles.deleteIconContainer,
-            pressed && styles.deleteIconContainerActive,
+            pressed && styles.deleteIconContainerActive,  // Visual feedback on press
           ]}>
           <MaterialIcons testID="delete-icon" name="delete" size={16} color={COLORS.background} />
         </Pressable>
+
+        {/* The actual split line with active state styling */}
         <View style={[styles.line, isDragging && styles.lineActive]} />
 
+        {/* Drag handle - right side of the line */}
         <View
           style={[
             styles.iconContainer,
             styles.dragHandleIconContainer,
-            isDragging && styles.dragHandleIconContainerActive,
+            isDragging && styles.dragHandleIconContainerActive,  // Visual feedback while dragging
           ]}>
           <MaterialIcons
             testID="drag-handle-icon"
@@ -89,6 +134,7 @@ export const SplitLine = ({
           />
         </View>
 
+        {/* Split line index indicator - centered above the line */}
         <View style={[styles.iconContainer, styles.indexContainer]}>
           <Text style={styles.index}>{index}</Text>
         </View>

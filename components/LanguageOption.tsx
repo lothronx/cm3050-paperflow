@@ -1,13 +1,36 @@
+/**
+ * Language Option Component for the PaperFlow application
+ *
+ * Provides a toggle button for switching between English and other languages
+ * Handles language state and updates the UI accordingly
+ */
+
+// React Native core imports
 import { TouchableOpacity, StyleSheet } from "react-native";
+
+// Icons
 import { FontAwesome6 } from "@expo/vector-icons";
+
+// App constants
 import { COLORS } from "@/constants/Colors";
 import { MARGINS } from "@/constants/Margins";
 
+/**
+ * Interface defining the props for the LanguageOption component
+ *
+ * @property isEnglish - Boolean indicating if English is currently selected
+ * @property onToggle - Callback function to handle language toggle
+ */
 interface LanguageOptionProps {
   isEnglish: boolean;
   onToggle: () => void;
 }
 
+/**
+ * Language Option Component
+ *
+ * A touchable language toggle button with appropriate styling
+ */
 export const LanguageOption = ({ isEnglish, onToggle }: LanguageOptionProps) => (
   <TouchableOpacity
     onPress={onToggle}
@@ -24,6 +47,7 @@ export const LanguageOption = ({ isEnglish, onToggle }: LanguageOptionProps) => 
   </TouchableOpacity>
 );
 
+// Styles for the language toggle button
 const styles = StyleSheet.create({
   languageButton: {
     position: "absolute",

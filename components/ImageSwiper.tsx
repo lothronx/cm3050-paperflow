@@ -1,16 +1,39 @@
+/**
+ * Image Swiper Component
+ * 
+ * Provides a image carousel with:
+ * - Custom pagination dots
+ * - Image carousel display
+ * - Shadow effects for container
+ */
+
+// Swiper library for image carousel
 import Swiper from "react-native-swiper";
-import { View, Image, StyleSheet, StatusBar } from "react-native";
+
+// React Native core imports
+import { View, Image, StyleSheet } from "react-native";
+
+// Custom constants
 import { COLORS } from "@/constants/Colors";
 import { MARGINS } from "@/constants/Margins";
 
+/**
+ * Props for ImageSwiper component
+ * 
+ * @property images - Array of image URIs to display in the swiper
+ */
 interface ImageSwiperProps {
   images: string[];
 }
 
+/**
+ * Image Swiper Component
+ * 
+ * Displays a image carousel with custom pagination
+ */
 export const ImageSwiper = ({ images }: ImageSwiperProps) => {
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
       <Swiper
         style={styles.wrapper}
         dot={<View style={styles.dot} />}
@@ -29,6 +52,7 @@ export const ImageSwiper = ({ images }: ImageSwiperProps) => {
   );
 };
 
+// Styles for component layout and appearance
 const styles = StyleSheet.create({
   container: {
     flex: 1,

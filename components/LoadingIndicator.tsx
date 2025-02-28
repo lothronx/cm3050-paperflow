@@ -1,6 +1,21 @@
+/**
+ * Loading Indicator Component for the PaperFlow application
+ *
+ * Displays a full-screen loading spinner with a semi-transparent overlay
+ * Used during asynchronous operations to indicate loading state
+ */
+
+// React Native core imports
 import { View, ActivityIndicator, StyleSheet } from "react-native";
+
+// App constants
 import { COLORS } from "@/constants/Colors";
 
+/**
+ * Loading Indicator Component
+ *
+ * @returns A full-screen loading spinner with overlay
+ */
 export function LoadingIndicator() {
   return (
     <View style={styles.loadingContainer} testID="loading-container">
@@ -9,6 +24,7 @@ export function LoadingIndicator() {
   );
 }
 
+// Styles for the loading indicator container
 const styles = StyleSheet.create({
   loadingContainer: {
     position: "absolute",

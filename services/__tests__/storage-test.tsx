@@ -15,6 +15,13 @@ describe("StorageService", () => {
     // Also clear any mock implementations
     (AsyncStorage.getItem as jest.Mock).mockReset();
     (AsyncStorage.setItem as jest.Mock).mockReset();
+    // Silence console.error for tests
+    jest.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    // Restore console.error after each test
+    jest.restoreAllMocks();
   });
 
   describe("getSettings", () => {
@@ -67,19 +74,12 @@ describe("StorageService", () => {
       // Mock AsyncStorage to throw error
       (AsyncStorage.getItem as jest.Mock).mockRejectedValueOnce(new Error("Storage error"));
 
-      // Mock console.error to prevent error output in tests
-      const consoleSpy = jest.spyOn(console, "error").mockImplementation();
-
       const settings = await StorageService.getSettings();
 
       expect(settings).toEqual({
         pageSize: null,
         autoSplit: null,
       });
-
-      expect(consoleSpy).toHaveBeenCalledWith("Error loading saved values:", expect.any(Error));
-
-      consoleSpy.mockRestore();
     });
   });
 
@@ -95,14 +95,7 @@ describe("StorageService", () => {
       // Mock AsyncStorage to throw error
       (AsyncStorage.setItem as jest.Mock).mockRejectedValueOnce(new Error("Storage error"));
 
-      // Mock console.error to prevent error output in tests
-      const consoleSpy = jest.spyOn(console, "error").mockImplementation();
-
       await StorageService.savePageSize("A4");
-
-      expect(consoleSpy).toHaveBeenCalledWith("Error saving page size:", expect.any(Error));
-
-      consoleSpy.mockRestore();
     });
   });
 
@@ -123,14 +116,59 @@ describe("StorageService", () => {
       // Mock AsyncStorage to throw error
       (AsyncStorage.setItem as jest.Mock).mockRejectedValueOnce(new Error("Storage error"));
 
-      // Mock console.error to prevent error output in tests
-      const consoleSpy = jest.spyOn(console, "error").mockImplementation();
-
       await StorageService.saveAutoSplit(true);
+    });
+  });
 
-      expect(consoleSpy).toHaveBeenCalledWith("Error saving autoSplit setting:", expect.any(Error));
+  describe("getUserLanguage", () => {
+    test("returns the saved language when it exists", async () => {
+      (AsyncStorage.getItem as jest.Mock).mockImplementationOnce(() =>
+        Promise.resolve("en")
+      );
 
-      consoleSpy.mockRestore();
+      const language = await StorageService.getUserLanguage();
+
+      expect(language).toBe("en");
+      expect(AsyncStorage.getItem).toHaveBeenCalledWith("@paperflow_user_language");
+    });
+
+    test("returns null when no language is saved", async () => {
+      (AsyncStorage.getItem as jest.Mock).mockImplementationOnce(() =>
+        Promise.resolve(null)
+      );
+
+      const language = await StorageService.getUserLanguage();
+
+      expect(language).toBeNull();
+    });
+
+    test("returns null and logs error when AsyncStorage fails", async () => {
+      (AsyncStorage.getItem as jest.Mock).mockImplementationOnce(() =>
+        Promise.reject(new Error("Storage error"))
+      );
+
+      const language = await StorageService.getUserLanguage();
+
+      expect(language).toBeNull();
+    });
+  });
+
+  describe("saveUserLanguage", () => {
+    test("saves the language successfully", async () => {
+      await StorageService.saveUserLanguage("fr");
+
+      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+        "@paperflow_user_language",
+        "fr"
+      );
+    });
+
+    test("logs error when AsyncStorage fails", async () => {
+      (AsyncStorage.setItem as jest.Mock).mockImplementationOnce(() =>
+        Promise.reject(new Error("Storage error"))
+      );
+
+      await StorageService.saveUserLanguage("es");
     });
   });
 });

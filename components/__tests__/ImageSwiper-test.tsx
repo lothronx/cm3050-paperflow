@@ -55,11 +55,4 @@ describe("ImageSwiper", () => {
     const images = UNSAFE_queryAllByType(Image);
     expect(images).toHaveLength(0);
   });
-
-  it("should render StatusBar with light-content style", () => {
-    const { UNSAFE_getByType } = render(<ImageSwiper images={mockImages} />);
-
-    const statusBar = UNSAFE_getByType(StatusBar);
-    expect(statusBar.props.barStyle).toBe("light-content");
-  });
 });
