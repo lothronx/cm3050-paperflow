@@ -91,11 +91,8 @@ export const SplitLine = ({
       onEnded={handleGestureEnd}
       onFailed={handleGestureEnd}
       onCancelled={handleGestureEnd}
-      minDist={0} // Allow immediate response to vertical movement
-      activeOffsetY={[-5, 5]}>
-      {" "}
-      {/* Activate gesture after 5px vertical movement */}
-      {/* Main container positioned absolutely based on split position */}
+      minDist={0} 
+      activeOffsetY={[-5, 5]}>  
       <View
         testID="split-line-container"
         style={[
@@ -106,7 +103,6 @@ export const SplitLine = ({
             transform: [{ translateX: -splitLineWidth / 2 }], // Center the line horizontally
           },
         ]}>
-        {/* Delete button - left side of the line */}
         <Pressable
           testID="split-line-delete-button"
           onPress={handleRemoveSplit}
@@ -123,10 +119,8 @@ export const SplitLine = ({
           />
         </Pressable>
 
-        {/* The actual split line with active state styling */}
         <View style={[styles.line, isDragging && styles.lineActive]} />
 
-        {/* Drag handle - right side of the line */}
         <View
           style={[
             styles.iconContainer,
@@ -141,7 +135,6 @@ export const SplitLine = ({
           />
         </View>
 
-        {/* Split line index indicator - centered above the line */}
         <View style={[styles.iconContainer, styles.indexContainer]}>
           <Text style={styles.index}>{index}</Text>
         </View>
