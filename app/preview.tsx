@@ -1,12 +1,12 @@
 /**
  * Preview Screen Component for the PaperFlow application
- * 
+ *
  * This screen allows users to:
  * - Preview processed images
  * - Save images to their device
  * - Generate and share a PDF of the images
  * - Navigate back to the home screen
- * 
+ *
  * Handles PDF generation and media library permissions
  */
 
@@ -39,7 +39,7 @@ import { useMediaLibrary } from "@/hooks/useMediaLibrary";
 
 /**
  * Preview Screen Component
- * 
+ *
  * Handles image preview, PDF generation, and media saving functionality
  */
 export default function PreviewScreen() {
@@ -66,8 +66,8 @@ export default function PreviewScreen() {
   const handleSharePDF = async () => {
     try {
       setIsProcessing(true);
-
       const result = await generatePdfFromImages(images, params.pageSize);
+      setIsProcessing(false);
 
       await Sharing.shareAsync(result.uri, {
         mimeType: "application/pdf",
@@ -76,8 +76,6 @@ export default function PreviewScreen() {
       });
     } catch (error) {
       Alert.alert("Failed to share. Please try again.");
-    } finally {
-      setIsProcessing(false);
     }
   };
 
