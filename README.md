@@ -56,7 +56,7 @@ Watch PaperFlow in action:
   
 | Home Screen | Split & Edit | Preview & Export |
 |-------------|--------------|------------------|
-| ![Home Screen](https://github.com/user-attachments/assets/1) | ![Split Screen](https://github.com/user-attachments/assets/2) | ![Preview Screen](https://github.com/user-attachments/assets/3) |
+| ![Home Screen](./assets/images/image1.jpeg) | ![Split Screen](./assets/images/image2.jpeg) | ![Preview Screen](./assets/images/image3.jpeg) |
 | Configure page size and auto-split options | Manually adjust split lines with zoom controls | Preview results and export as PDF or images |
 
 </div>
